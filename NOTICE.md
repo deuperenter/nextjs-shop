@@ -14,11 +14,11 @@ This project includes code and resources from the following third-party librarie
 
 ---
 
-## 2. @edsdk/n1ed-react
+## 2. @edsdk/slate
 
-- **License**: LGPL v3 License
-- **Source**: https://n1ed.com
-- **Attribution**: N1ED Editor by EdSDK
+- **License**: MIT License
+- **Source**: https://github.com/ianstormtaylor/slate
+- **Attribution**: ianstormtaylor
 
 ---
 

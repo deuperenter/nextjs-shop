@@ -1,4 +1,10 @@
-import { delivery, detail, subDetails } from "@/types/received-data";
+import {
+  delivery,
+  detail,
+  options,
+  reviews,
+  subDetails,
+} from "@/types/received-data";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -9,20 +15,40 @@ const ProductDetail = async ({
 }) => {
   const { id } = await params;
 
+  // 언어별로 카테고리 명을 다르고 보여줍니다.
+  const ctry = ["US", "KR"];
+
+  const interCategory = [
+    ["electronics", "전자기기"],
+    ["computer", "컴퓨터"],
+    ["laptop", "노트북"],
+    ["netbook", "넷북"],
+  ];
+
   const detail: detail = {
     // product id, 상품 아이디, 상품을 구별하기 위해 사용합니다.
     pid: "111",
     // seller name, 판매자 이름입니다. 판매자 이름을 클릭(/seller/deuper)하면 판매자가 판매자는 상품의 목록을 볼 수 있습니다.
+    category: ["154", "electronics", "computer", "laptop", "netbook"],
     seller: "deuper",
     // 옵션을 누르면 다른 상품을 보여줍니다. 모든 조합이 다 가능한 것은 아닙니다.
+    rating: {
+      totalRating: 2,
+      ratingScore: 3.5,
+      5: 1,
+      4: 0,
+      3: 0,
+      2: 1,
+      1: 0,
+    },
     options: {
       // 옵션별로 이름과, 섬네일 이미지 주소가 객체 배열로 있습니다. 섬네일이 없는 경우 배열 타입입니다.
       type: {
         color: [
-          { red: "/detail_ex/image_red" },
-          { blue: "/detail_ex/image_blue" },
-          { white: "/detail_ex/image_white" },
-          { black: "/detail_ex/image_black" },
+          { red: "/detail_ex/img_red.png" },
+          { blue: "/detail_ex/img_blue.png" },
+          { white: "/detail_ex/img_white.png" },
+          { black: "/detail_ex/img_black.png" },
         ],
         storage: ["500gb SSD", "1tb SSD", "2tb SSD"],
       },
@@ -36,7 +62,7 @@ const ProductDetail = async ({
       "/detail_ex/from_sel_img3.png",
     ],
     // 제조업체에서 제공하는 설명입니다.
-    pDesc: ["상품의 설명입니다."],
+    pDesc: "상품의 설명입니다.",
     // 사용자 리뷰 배열입니다.
     reviews: {
       // 리뷰 전체를 보여주지 않고 소량의 리뷰만 보여줍니다.
@@ -45,16 +71,26 @@ const ProductDetail = async ({
         {
           // review id: 번호, text: 내용, rating: 평가, rImgs: 리뷰 이미지들, 리뷰 동영상 주소입니다.
           rId: "1",
-          rText: "Good!",
+          uName: "Weight",
+          uCtry: "US",
+          rTitle: "Good!",
+          rText: "Good, It's So Light!",
           rating: 5,
           rImgs: ["/detail_ex/rimg1.png"],
+          rDate: "2025-06-28",
+          useful: 20,
         },
         {
           rId: "2",
+          uName: "Fast",
+          uCtry: "KR",
+          rTitle: "Bad!",
           rText: "Bad, It's Too Slow!",
-          rating: 1,
+          rating: 2,
           rImgs: ["/detail_ex/rimg2.png"],
           rvideo: ["/detail_ex/rvideo1.mp4"],
+          rDate: "2025-06-28",
+          useful: 10,
         },
       ],
     },
@@ -113,11 +149,11 @@ const ProductDetail = async ({
 
   const delivery: delivery = {
     // delivery fee, 배송비, 구매자가 지정한 국가를 기준으로 배송비를 산정한 금액입니다. 상품의 위치와 배송지의 거리를 기준으로 요금이 달라집니다. 사용자가 배송지를 바꿀 때마다 데이터를 요청해서 조건에 맞는 데이터를 가져옵니다.
-    dFee: "100000",
+    dFee: 100000,
     // Delivery Date,
     dDate: "2025-07-07",
     // Import Charge, 관세라는 뜻입니다. 다른 나라에서 물건이 올 경우 매기는 세금입니다.
-    dImpCharge: "30000",
+    dImpCharge: 30000,
     // delivery monetary unit, 배송 관련 비용을 계산할 때 기준이 되는 화폐 단위입니다.
     dMonUnit: "won",
     // 배송 가능한 나라입니다. 배송이 불가능한 경우 이전 값을 그대로 유지하고 구매할 수 없다고 알려야 합니다.
@@ -125,7 +161,6 @@ const ProductDetail = async ({
   };
 
   const { pid, seller, options, fromSelImg, pDesc, reviews } = detail;
-  const { reviewPage, content } = reviews;
   const {
     pSubId,
     pImgs,
@@ -138,18 +173,126 @@ const ProductDetail = async ({
     feature,
     pInfo,
   } = subDetails;
-  const { dFee, dDate, dImpCharge, dMonUnit, ableCtry } = delivery;
+
+  function showStock(stock: number) {
+    if (!stock) {
+      return <p>재고 없음</p>;
+    }
+    const selection = [];
+    for (let i = 1; i <= stock && i <= 30; i++) {
+      selection.push(<option>{i}</option>);
+    }
+    return (
+      <p>
+        수량: <select id="stock">{selection}</select>
+      </p>
+    );
+  }
 
   const monUnitChart = {
     won: "₩",
   };
 
+  // 나중에 타입 한 번에 추출할 것이다.
   function monUnitSymbol(monetaryUnit) {
     return monUnitChart[monetaryUnit];
   }
 
-  function printPInfo(pInfo) {
-    // 중첩 for 문으로 출력하면 된다.
+  const monUnit = monUnitSymbol(pMonUnit);
+
+  // slate.js를 사용할 거라서 문자열를 JSON으로 파싱한 다음에 출력하면 된다.
+  function printReviews(reviews: reviews) {
+    return reviews.content.map((c) => {
+      const { rId, rText, rating, rImgs, rvideo } = c;
+      return (
+        <div key={rId}>
+          <div>{rating}</div>
+          <div>{rText}</div>
+          {rImgs?.map((img, i) => (
+            <Image
+              key={`rImage${i}`}
+              alt={`reviewImg${i}`}
+              src={img}
+              width={250}
+              height={250}
+            />
+          ))}
+          {rvideo && (
+            <video width={320} height={320} controls preload="none">
+              <source src={rvideo[0]} type="video/mp4" />
+            </video>
+          )}
+        </div>
+      );
+    });
+  }
+
+  function printOptions(options: options) {
+    const { type, able } = options;
+    // 불가능한 옵션을 선택한 경우 기본값으로 이동하는 방식 Dell의 방식을 가져왔다.
+    const allOptions = [];
+    for (const title in type) {
+      const someOptions = [];
+      for (const content of type[title]) {
+        let option;
+        if (content instanceof Object) {
+          const subTitle = Object.getOwnPropertyNames(content)[0];
+          const img = content[subTitle];
+          option = (
+            <button key={subTitle}>
+              <Image
+                key={`optionImg${subTitle}`}
+                src={img}
+                alt={`${title}${subTitle}`}
+                width={50}
+                height={50}
+              />
+              <div>{subTitle}</div>
+            </button>
+          );
+        } else {
+          option = <button key={content}>{content}</button>;
+        }
+        someOptions.push(option);
+      }
+      allOptions.push(someOptions);
+    }
+    return allOptions.map((o, i) => <div key={`optionType${i}`}>{o}</div>);
+  }
+
+  function exchangeMoney(money, MonUnit1, MonUnit2) {
+    const ctry = ["US", "KR", "CA"];
+    const rate = [1, 1350, 1.37];
+  }
+
+  function printDelivery(delivery: delivery) {
+    const { dFee, dDate, dImpCharge, dMonUnit, ableCtry } = delivery;
+
+    if (!ableCtry.includes("KR")) {
+      return "현재 지역은 배송 불가능합니다.";
+    }
+
+    return (
+      <>
+        <p>
+          정가: {monUnit}
+          {pPrice}
+        </p>
+        <p>
+          배송비: {monUnit}
+          {dFee}
+        </p>
+        <p>
+          관세: {monUnit}
+          {dImpCharge}
+        </p>
+        <p>
+          전체 배송비: {monUnit}
+          {dFee + dImpCharge}
+        </p>
+        <p>배송 가능 날짜: {dDate}</p>
+      </>
+    );
   }
 
   return (
@@ -161,27 +304,37 @@ const ProductDetail = async ({
         </video>
       )}
       <p>{pName}</p>
+      {options && printOptions(options)}
       <p>{seller}</p>
       <p>
         <Link href={`/seller/${seller}`}>{seller}의 다른 상품 보기</Link>
       </p>
-
       {discount && (
         <p>
-          {`-${discount}% ${monUnitSymbol(pMonUnit)}${Math.ceil(
+          {`-${discount}% ${monUnit}${Math.ceil(
             (pPrice * (100 - discount)) / 100
           )}`}
         </p>
       )}
-
-      <p>정가: {pPrice}</p>
-      {feature.map((f, i) => (
-        <p key={`feature${i}`}>{f}</p>
+      {showStock(stock)}
+      {printDelivery(delivery)}
+      {/* feature */}
+      {fromSelImg?.map((fImg, i) => (
+        <Image
+          key={`rImage${i}`}
+          src={fImg}
+          alt="상품 이미지1"
+          width={250}
+          height={250}
+        />
       ))}
+      <p>제품 설명</p>
+      <p>{pDesc}</p>
+      <p>리뷰 보기</p>
+      {printReviews(reviews)}
       <p>
         <Link href="/reviews/111">리뷰 더 보기</Link>
       </p>
-      <div className="#editor"></div>
     </div>
   );
 };

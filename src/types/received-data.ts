@@ -1,22 +1,41 @@
+export type reviews = {
+  content: {
+    rId: string;
+    uName: string;
+    uCtry: string;
+    rTitle: string;
+    rText: string;
+    rating: number;
+    rImgs?: string[];
+    rvideo?: string[];
+    rDate: string;
+    useful: number;
+  }[];
+};
+
+export type options = {
+  // [k: string]: { [k: string]: string }[]은 이 코드 뒤에 설명이 있습니다.
+  type: { [k: string]: string[] | { [k: string]: string }[] };
+  able: string[];
+};
+
 export type detail = {
   pid: string;
+  category: string[];
   seller: string;
-  options?: {
-    // [k: string]: { [k: string]: string }[]은 이 코드 뒤에 설명이 있습니다.
-    type: { [k: string]: string[] | { [k: string]: string }[] };
-    able: string[];
+  options?: options;
+  rating: {
+    totalRating: number;
+    ratingScore: number;
+    5: number;
+    4: number;
+    3: number;
+    2: number;
+    1: number;
   };
   fromSelImg?: string[];
-  pDesc: string[];
-  reviews: {
-    content: {
-      rId: string;
-      rText: string;
-      rating: number;
-      rImgs?: string[];
-      rvideo?: string[];
-    }[];
-  };
+  pDesc: string;
+  reviews: reviews;
 };
 
 export type subDetails = {
@@ -28,15 +47,14 @@ export type subDetails = {
   pMonUnit: string;
   discount?: number;
   stock: number;
-  feature: string[];
-  // 어떤 내용이 들어갈지 몰라 object로 했습니다. 객체인지 배열인지 구분해서 출력하는 것도 뒤에서 설명하겠습니다.
-  pInfo: object;
+  feature: string;
+  pInfo: string;
 };
 
 export type delivery = {
-  dFee: string;
+  dFee: number;
   dDate: string;
-  dImpCharge: string;
+  dImpCharge: number;
   dMonUnit: string;
   ableCtry: string[];
 };
