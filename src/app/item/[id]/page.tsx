@@ -10,7 +10,7 @@ import {
 } from "@/types/received-data";
 import Image from "next/image";
 import Link from "next/link";
-import { useParams, useSearchParams } from "next/navigation";
+import { redirect, useParams, useSearchParams } from "next/navigation";
 import { useState } from "react";
 
 const nation: string[] = ["US", "KR", "CA"];
@@ -262,9 +262,18 @@ const ProductDetail = () => {
 
   function printOptions(options: options) {
     const { type, able } = options;
-    const opt = searchParam.get("opt") || "00"; // 선택한 옵션 명에서 순서 1번에서 1번, 2번에서 1번 이런 식으로, option
+    const opt = searchParam.get("opt") || able[0]; // 선택한 옵션 명에서 순서 1번에서 1번, 2번에서 1번 이런 식으로, option
     const lst = searchParam.get("lst") || 0; // 마지막으로 선택한 옵션 // last select
     const possible = able.filter((e) => e[+lst] === opt[+lst]);
+
+    // 오류 방지
+    if (
+      !able.filter((a) => a === opt).length ||
+      isNaN(+lst) ||
+      +lst > opt.length - 1
+    ) {
+      redirect(`/item/${id}/`);
+    }
 
     const allOptions = [];
     let digit = -1;
