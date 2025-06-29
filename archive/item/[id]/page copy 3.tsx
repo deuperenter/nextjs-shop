@@ -262,12 +262,40 @@ const ProductDetail = () => {
 
   function printOptions(options: options) {
     const { type, able } = options;
+    // Dell 방식은 없는 값이면 다른 타입의 가장 첫 번째 값으로 변경하는 방식이다.
+    // Amazon 방식은 조합 중에서 사용가능한 조합을 보여주는 방식이다. red를 클릭했을 때 가능한 조합, 500GB를 클릭했을 때 가능한 조합 이런 식으로 말이다.
+    // 근데 생각해보니 비슷한 방식이다. Dell도 옵션 항목을 없애지 않을 뿐이다. Amazon 모니터 항목 들어가보고 알았다.
+    // 자잘한 옵션을 바꾸는 것은 허용 근데. 아예 다른 제품으로 이동하는 건 지양: 모니터는 안 됨. 식기대 크기, 색상 바꾸는 것은 가능
+    // 우선순위는 사용자가 정하는 것이다.
+    // const amount = "0123456789abcdefghijklmnopqrstuvwxyz"; // 한 타입이 35가지 경우가 가능하다. chatAt를 쓸 수도?
+    // console.log(able);
     const opt = searchParam.get("opt") || "00"; // 선택한 옵션 명에서 순서 1번에서 1번, 2번에서 1번 이런 식으로, option
-    const lst = searchParam.get("lst") || 0; // 마지막으로 선택한 옵션 // last select
-    const possible = able.filter((e) => e[+lst] === opt[+lst]);
+    const lst = searchParam.get("lst") || "0"; // 마지막으로 선택한 옵션 // last select
+    // 사용자가 커스텀하게 진짜 원하는 옵션은 존재하지 않을 수 있다. 이걸 어떻게 할 수는 없다. 색깔과 용랑 중에서 포기를 해야 한다.
+    // 옵션을 선택하는 데 옵션이 없으면 "가능한 옵션" 띄우기
+    // 옵션이 없는 거랑 재고가 없는 거랑 별개이다. 재고가 없으면 눌렀을 때 재고 없음이 뜬다.
+    // 사실 이 방법이 가장 간단한 것이다.
+
+    // [ "00", "01", "02", "10", "11", "20", "30" ]
+
+    // 버튼 링크: 존재하지 않는 경우 "", 있는 경우 번호 표기
+    // able의 형태와 sid와 생각을 좀 하자
+    // 선택된 옵션도 알아야 한다. 선택된 옵션 1개를 기준으로 가능한 옵션을 표기. 선택됨 옵션: 02, 12 - 가능 옵션과 다르다. 첫 번째 옵션에서 3번째, 두 번째 옵션에서 3번째 | 가능은: 첫 번째 옵션 첫 번째와 두 번째 옵션 세 번째를 선택. 기본 값은 첫 번째 옵션의 첫 번째
+    // console.log("opt", opt);
+    // console.log("lst", lst);
+    // console.log("0001".indexOf("1"));
+    // console.log(lst.indexOf("1"));
+    // console.log(11, opt[lst.indexOf("1")]);
+    const possible = able.filter((e) => e[lst] === opt[lst]);
+
+    // 시나리오: 우연히 첫 상품을 선택 opt=00&lst=0
+    // 가능한 옵션 00, 01, 02
+
+    // 옵션이 3개인 경우 이거 초과는 너무 과하다.
 
     const allOptions = [];
     let digit = -1;
+    console.log(able);
     for (const title in type) {
       digit++;
       const someOptions = [];
