@@ -267,101 +267,48 @@ const ProductDetail = () => {
     // 근데 생각해보니 비슷한 방식이다. Dell도 옵션 항목을 없애지 않을 뿐이다. Amazon 모니터 항목 들어가보고 알았다.
     // 자잘한 옵션을 바꾸는 것은 허용 근데. 아예 다른 제품으로 이동하는 건 지양: 모니터는 안 됨. 식기대 크기, 색상 바꾸는 것은 가능
     // 우선순위는 사용자가 정하는 것이다.
-    // const amount = "0123456789abcdefghijklmnopqrstuvwxyz"; // 한 타입이 35가지 경우가 가능하다. chatAt를 쓸 수도?
-    // console.log(able);
-    const opt = searchParam.get("opt") || "00"; // 선택한 옵션 명에서 순서 1번에서 1번, 2번에서 1번 이런 식으로, option
-    const lst = searchParam.get("lst") || "0"; // 마지막으로 선택한 옵션 // last select
+    const amount = "0123456789abcdefghijklmnopqrstuvwxyz"; // 한 타입이 35가지 경우가 가능하다. chatAt를 쓸 수도?
+    console.log(able);
+    const st = searchParam.get("st") || "10"; // 아무것도 선택 안 했을 때 "00"
+    const op = searchParam.get("op") || "10"; // 10 01 - 마지막으로 이 요소를 선택했다.
     // 사용자가 커스텀하게 진짜 원하는 옵션은 존재하지 않을 수 있다. 이걸 어떻게 할 수는 없다. 색깔과 용랑 중에서 포기를 해야 한다.
-    // 옵션을 선택하는 데 옵션이 없으면 "가능한 옵션" 띄우기
-    // 옵션이 없는 거랑 재고가 없는 거랑 별개이다. 재고가 없으면 눌렀을 때 재고 없음이 뜬다.
-    // 사실 이 방법이 가장 간단한 것이다.
+    // 그냥 통제하고 싶지 않다. 옵션을 계속 선택하는 데 옵션이 없으면 다른 옵션 보여주기
+    console.log("a".charCodeAt(0));
 
     // [ "00", "01", "02", "10", "11", "20", "30" ]
+
+    console.log(op, st);
 
     // 버튼 링크: 존재하지 않는 경우 "", 있는 경우 번호 표기
     // able의 형태와 sid와 생각을 좀 하자
     // 선택된 옵션도 알아야 한다. 선택된 옵션 1개를 기준으로 가능한 옵션을 표기. 선택됨 옵션: 02, 12 - 가능 옵션과 다르다. 첫 번째 옵션에서 3번째, 두 번째 옵션에서 3번째 | 가능은: 첫 번째 옵션 첫 번째와 두 번째 옵션 세 번째를 선택. 기본 값은 첫 번째 옵션의 첫 번째
-    // console.log("opt", opt);
-    // console.log("lst", lst);
-    // console.log("0001".indexOf("1"));
-    // console.log(lst.indexOf("1"));
-    // console.log(11, opt[lst.indexOf("1")]);
-    const possible = able.filter((e) => e[lst] === opt[lst]);
-    console.log(111, possible);
-
-    // 시나리오: 우연히 첫 상품을 선택 opt=00&lst=0
-    // 가능한 옵션 00, 01, 02
-
-    // 옵션이 3개인 경우 이거 초과는 너무 과하다.
 
     const allOptions = [];
-    let digit = -1;
     for (const title in type) {
-      digit++;
       const someOptions = [];
-      let optOrder = -1;
       for (const content of type[title]) {
-        optOrder++;
         let option;
         if (content instanceof Object) {
           const subTitle = Object.getOwnPropertyNames(content)[0];
           const img = content[subTitle];
-          let check = "";
-          let newOpt;
-          if (opt[digit] === `${optOrder}`) {
-            newOpt = opt;
-            check += "this";
-          } else {
-            possible.forEach((p) => {
-              if (p[digit] === `${optOrder}`) {
-                check += "pos";
-              }
-            });
-            newOpt = `${opt.substring(0, digit)}${optOrder}${opt.substring(
-              digit + 1
-            )}`;
-          }
           option = (
-            <Link
-              key={subTitle}
-              href={`/item/${id}?opt=${newOpt}&lst=${digit}`}
-            >
+            <Link key={subTitle} href={`/item/${id}/`}>
               <button key={subTitle}>
                 <Image
                   key={`optionImg${subTitle}`}
                   src={img}
                   alt={`${title}${subTitle}`}
-                  width={65}
-                  height={65}
+                  width={50}
+                  height={50}
                 />
-                <div>{check}</div>
                 <div>{subTitle}</div>
               </button>
             </Link>
           );
         } else {
-          let check = "";
-          let newOpt;
-          if (opt[digit] === `${optOrder}`) {
-            newOpt = opt;
-            check += "this";
-          } else {
-            possible.forEach((p) => {
-              if (p[digit] === `${optOrder}`) {
-                check += "pos";
-              }
-            });
-            newOpt = `${opt.substring(0, digit)}${optOrder}${opt.substring(
-              digit + 1
-            )}`;
-          }
-
           option = (
-            <Link key={content} href={`/item/${id}?opt=${newOpt}&lst=${digit}`}>
-              <button key={content}>
-                <div>{check}</div>
-                {content}
-              </button>
+            <Link key={content} href={`/item/${id}/`}>
+              <button key={content}>{content}</button>
             </Link>
           );
         }
@@ -451,7 +398,7 @@ const ProductDetail = () => {
           {cMonUnit}${discountPrice}
         </p>
       )}
-      {discount && <p>정가: {`${cMonUnit}${exchangePrice(pPrice)}`}</p>}
+      {discount && <p>정가: {exchangePrice(pPrice)}</p>}
       {/* 그냥 <Editable readOnly /> 하면 된다. 프리뷰도 필요 없다. */}
       {showStock(stock)}
       <WebEditor editable={true} initial={feature} />

@@ -22,7 +22,7 @@ export default function Nav() {
         <Form action="/s" className={roundcss.searchBar}>
           <div className={`${roundcss.round100} ${roundcss.searchBox}`}>
             <input
-              placeholder="TXT SHOP에서 검색하세요"
+              placeholder="EnterDeuver에서 검색하세요"
               name="q"
               className={roundcss.searchInput}
             />

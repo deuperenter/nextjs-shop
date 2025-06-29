@@ -1,5 +1,3 @@
-// 나중에 서버 사이드 컴포넌트와 클라이언트 사이드 컴포넌트를 구분해야 한다.
-"use client";
 import WebEditor from "@/app/test/web-editor";
 import {
   delivery,
@@ -10,31 +8,24 @@ import {
 } from "@/types/received-data";
 import Image from "next/image";
 import Link from "next/link";
-import { useParams, useSearchParams } from "next/navigation";
-import { useState } from "react";
 
-const nation: string[] = ["US", "KR", "CA"];
-const SelectCtry = ({ ctry, setCtry }) => {
-  return (
-    <>
-      <select
-        id="selectCtry"
-        onChange={(e) => setCtry(e.target.value)}
-        defaultValue={ctry}
-      >
-        {nation.map((n, i) => (
-          <option key={`ctry${i}`}>{n}</option>
-        ))}
-      </select>
-    </>
-  );
-};
+const ProductDetail = async ({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) => {
+  const { id } = await params;
 
-const ProductDetail = () => {
-  const { id } = useParams();
-  const searchParam = useSearchParams();
+  // 언어별로 카테고리 명을 다르고 보여줍니다.
+  const ctry = ["US", "KR", "CA"];
 
-  const [ctry, setCtry] = useState("US");
+  // 미국 단어를 기준으로 변환할 단어 목록입니다.
+  const interCategory = {
+    electronics: [{ KR: "전자기기", CA: "electronics" }],
+    computer: [{ KR: "컴퓨터", CA: "computer" }],
+    laptop: [{ KR: "노트북", CA: "laptop" }],
+    netbook: [{ KR: "넷북", CA: "netbook" }],
+  };
 
   // 상품 세부 정보를 담은 객체입니다.
   const detail: detail = {
@@ -175,8 +166,7 @@ const ProductDetail = () => {
 
   // 화폐 단위나 환율 계산
   // current country: 현재 국가, 이것은 사용자가 설정한 값이나, ip 주소를 통해 알아낸 값입니다.
-
-  // console.log(localStorage.getItem("ctry"));
+  const cCtry = "US";
 
   const monUnitChart: { [k: string]: string }[] = [
     { US: "$" },
@@ -194,7 +184,7 @@ const ProductDetail = () => {
   }
 
   // 현재 화폐 단위: 사이트에서 설정한 국가를 기준한다. 합니다.
-  const cMonUnit = monUnitSymbol(ctry);
+  const cMonUnit = monUnitSymbol(cCtry);
 
   // 배송비 관련된 내용은 상품을 판매하는 국가를 기준으로 합니다.
 
@@ -206,11 +196,9 @@ const ProductDetail = () => {
   ];
 
   // 환율을 구하는 함수입니다.
-  function exchangePriceCallback(pCtry: string, cCtry: string) {
+  function exchangeRateConverter(pCtry: string, cCtry: string) {
     if (pCtry === cCtry) {
-      return function (pPrice: number) {
-        return pPrice;
-      };
+      return price;
     }
 
     let pCtryPrice: number = 0;
@@ -225,24 +213,22 @@ const ProductDetail = () => {
       }
     }
     if (cCtryPrice && pCtryPrice) {
-      return function (pPrice: number) {
-        // 소수점을 쓰는 나라인 경우 소수점 2자리 표기
-        if (["US", "CA"].includes(cCtry)) {
-          return Math.ceil(((pPrice * cCtryPrice) / pCtryPrice) * 100) / 100;
-        }
-        return Math.ceil((pPrice * cCtryPrice) / pCtryPrice);
-      };
+      return cCtryPrice / pCtryPrice;
     } else {
       throw new Error("상품의 국가 표기가 잘못됐습니다.");
     }
   }
 
   // 함수 API를 사용하면 exchangeRates와 exchangeRate는 함수 API로 대체됩니다.
-  const exchangePrice = exchangePriceCallback(pCtry, ctry);
+  function exchangePrice(pPrice: number, exchangeRate: number) {
+    return Math.ceil(pPrice * exchangeRate);
+  }
 
-  const discountPrice = discount
-    ? Math.ceil((exchangePrice(pPrice) * (100 - discount)) / 100)
-    : exchangePrice(pPrice);
+  const exchangeRate = exchangeRateConverter(pCtry, cCtry);
+
+  const price = exchangePrice(pPrice, exchangeRate);
+
+  console.log(price);
 
   // 출력할 내용을 반환하는 함수
   function showStock(stock: number) {
@@ -262,108 +248,29 @@ const ProductDetail = () => {
 
   function printOptions(options: options) {
     const { type, able } = options;
-    // Dell 방식은 없는 값이면 다른 타입의 가장 첫 번째 값으로 변경하는 방식이다.
-    // Amazon 방식은 조합 중에서 사용가능한 조합을 보여주는 방식이다. red를 클릭했을 때 가능한 조합, 500GB를 클릭했을 때 가능한 조합 이런 식으로 말이다.
-    // 근데 생각해보니 비슷한 방식이다. Dell도 옵션 항목을 없애지 않을 뿐이다. Amazon 모니터 항목 들어가보고 알았다.
-    // 자잘한 옵션을 바꾸는 것은 허용 근데. 아예 다른 제품으로 이동하는 건 지양: 모니터는 안 됨. 식기대 크기, 색상 바꾸는 것은 가능
-    // 우선순위는 사용자가 정하는 것이다.
-    // const amount = "0123456789abcdefghijklmnopqrstuvwxyz"; // 한 타입이 35가지 경우가 가능하다. chatAt를 쓸 수도?
-    // console.log(able);
-    const opt = searchParam.get("opt") || "00"; // 선택한 옵션 명에서 순서 1번에서 1번, 2번에서 1번 이런 식으로, option
-    const lst = searchParam.get("lst") || "0"; // 마지막으로 선택한 옵션 // last select
-    // 사용자가 커스텀하게 진짜 원하는 옵션은 존재하지 않을 수 있다. 이걸 어떻게 할 수는 없다. 색깔과 용랑 중에서 포기를 해야 한다.
-    // 옵션을 선택하는 데 옵션이 없으면 "가능한 옵션" 띄우기
-    // 옵션이 없는 거랑 재고가 없는 거랑 별개이다. 재고가 없으면 눌렀을 때 재고 없음이 뜬다.
-    // 사실 이 방법이 가장 간단한 것이다.
-
-    // [ "00", "01", "02", "10", "11", "20", "30" ]
-
-    // 버튼 링크: 존재하지 않는 경우 "", 있는 경우 번호 표기
-    // able의 형태와 sid와 생각을 좀 하자
-    // 선택된 옵션도 알아야 한다. 선택된 옵션 1개를 기준으로 가능한 옵션을 표기. 선택됨 옵션: 02, 12 - 가능 옵션과 다르다. 첫 번째 옵션에서 3번째, 두 번째 옵션에서 3번째 | 가능은: 첫 번째 옵션 첫 번째와 두 번째 옵션 세 번째를 선택. 기본 값은 첫 번째 옵션의 첫 번째
-    // console.log("opt", opt);
-    // console.log("lst", lst);
-    // console.log("0001".indexOf("1"));
-    // console.log(lst.indexOf("1"));
-    // console.log(11, opt[lst.indexOf("1")]);
-    const possible = able.filter((e) => e[lst] === opt[lst]);
-    console.log(111, possible);
-
-    // 시나리오: 우연히 첫 상품을 선택 opt=00&lst=0
-    // 가능한 옵션 00, 01, 02
-
-    // 옵션이 3개인 경우 이거 초과는 너무 과하다.
-
+    // 불가능한 옵션을 선택한 경우 기본값으로 이동하는 방식 Dell의 방식을 가져왔다.
     const allOptions = [];
-    let digit = -1;
     for (const title in type) {
-      digit++;
       const someOptions = [];
-      let optOrder = -1;
       for (const content of type[title]) {
-        optOrder++;
         let option;
         if (content instanceof Object) {
           const subTitle = Object.getOwnPropertyNames(content)[0];
           const img = content[subTitle];
-          let check = "";
-          let newOpt;
-          if (opt[digit] === `${optOrder}`) {
-            newOpt = opt;
-            check += "this";
-          } else {
-            possible.forEach((p) => {
-              if (p[digit] === `${optOrder}`) {
-                check += "pos";
-              }
-            });
-            newOpt = `${opt.substring(0, digit)}${optOrder}${opt.substring(
-              digit + 1
-            )}`;
-          }
           option = (
-            <Link
-              key={subTitle}
-              href={`/item/${id}?opt=${newOpt}&lst=${digit}`}
-            >
-              <button key={subTitle}>
-                <Image
-                  key={`optionImg${subTitle}`}
-                  src={img}
-                  alt={`${title}${subTitle}`}
-                  width={65}
-                  height={65}
-                />
-                <div>{check}</div>
-                <div>{subTitle}</div>
-              </button>
-            </Link>
+            <button key={subTitle}>
+              <Image
+                key={`optionImg${subTitle}`}
+                src={img}
+                alt={`${title}${subTitle}`}
+                width={50}
+                height={50}
+              />
+              <div>{subTitle}</div>
+            </button>
           );
         } else {
-          let check = "";
-          let newOpt;
-          if (opt[digit] === `${optOrder}`) {
-            newOpt = opt;
-            check += "this";
-          } else {
-            possible.forEach((p) => {
-              if (p[digit] === `${optOrder}`) {
-                check += "pos";
-              }
-            });
-            newOpt = `${opt.substring(0, digit)}${optOrder}${opt.substring(
-              digit + 1
-            )}`;
-          }
-
-          option = (
-            <Link key={content} href={`/item/${id}?opt=${newOpt}&lst=${digit}`}>
-              <button key={content}>
-                <div>{check}</div>
-                {content}
-              </button>
-            </Link>
-          );
+          option = <button key={content}>{content}</button>;
         }
         someOptions.push(option);
       }
@@ -408,20 +315,20 @@ const ProductDetail = () => {
     return (
       <>
         <p>
-          가격: {cMonUnit}
-          {discountPrice}
+          정가: {cMonUnit}
+          {pPrice}
         </p>
         <p>
           배송비: {cMonUnit}
-          {exchangePrice(dFee)}
+          {dFee}
         </p>
         <p>
           관세: {cMonUnit}
-          {exchangePrice(dImpCharge)}
+          {dImpCharge}
         </p>
         <p>
-          총합: {cMonUnit}
-          {discountPrice + exchangePrice(dFee) + exchangePrice(dImpCharge)}
+          전체 배송비: {cMonUnit}
+          {dFee + dImpCharge}
         </p>
         <p>배송 가능 날짜: {dDate}</p>
       </>
@@ -431,7 +338,6 @@ const ProductDetail = () => {
   // 웹 페이지에 출력할 내용
   return (
     <div>
-      <SelectCtry ctry={ctry} setCtry={setCtry} />
       <Image src={pImgs[0]} alt="상품 이미지1" width={250} height={250} />
       {pVideo && (
         <video width={320} height={320} controls preload="none">
@@ -444,17 +350,16 @@ const ProductDetail = () => {
       <p>
         <Link href={`/seller/${seller}`}>{seller}의 다른 상품 보기</Link>
       </p>
-      {discount ? (
-        <p>{`-${discount}% ${cMonUnit}${discountPrice}`}</p>
-      ) : (
+      {discount && (
         <p>
-          {cMonUnit}${discountPrice}
+          {`-${discount}% ${cMonUnit}${Math.ceil(
+            (pPrice * (100 - discount)) / 100
+          )}`}
         </p>
       )}
-      {discount && <p>정가: {`${cMonUnit}${exchangePrice(pPrice)}`}</p>}
       {/* 그냥 <Editable readOnly /> 하면 된다. 프리뷰도 필요 없다. */}
-      {showStock(stock)}
       <WebEditor editable={true} initial={feature} />
+      {showStock(stock)}
       {printDelivery(delivery)}
       <WebEditor editable={true} initial={pInfo} />
       {fromSelImg?.map((fImg, i) => (

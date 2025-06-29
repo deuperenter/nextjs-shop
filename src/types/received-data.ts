@@ -20,7 +20,7 @@ export type options = {
 };
 
 export type detail = {
-  pid: string;
+  pId: string;
   category: string[];
   seller: string;
   options?: options;
@@ -44,7 +44,7 @@ export type subDetails = {
   pVideo?: string[];
   pName: string;
   pPrice: number;
-  pMonUnit: string;
+  pCtry: string;
   discount?: number;
   stock: number;
   feature: string;
@@ -55,6 +55,5 @@ export type delivery = {
   dFee: number;
   dDate: string;
   dImpCharge: number;
-  dMonUnit: string;
   ableCtry: string[];
 };

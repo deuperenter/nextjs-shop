@@ -17,12 +17,18 @@ import { useMemo, useState } from "react";
 import { createEditor } from "slate";
 import { Slate, Editable, withReact } from "slate-react";
 
-const WebEditor = () => {
+type editorProps = {
+  editable: boolean;
+  initial: string;
+};
+
+const WebEditor = ({ editable, initial }: editorProps) => {
   const [editor] = useState(() => withReact(createEditor()));
   // Update the initial content to be pulled from Local Storage if it exists.
   const initialValue = useMemo(
     () =>
-      JSON.parse(localStorage.getItem("content")) || [
+      // JSON.parse(localStorage.getItem("content")) ||
+      JSON.parse(initial) || [
         {
           type: "paragraph",
           children: [{ text: "" }],
@@ -30,8 +36,6 @@ const WebEditor = () => {
       ],
     []
   );
-
-  // 그냥 <Editable readOnly /> 하면 된다. 프리뷰도 필요 없다.
 
   return (
     <div>
@@ -49,7 +53,7 @@ const WebEditor = () => {
           }
         }}
       >
-        <Editable readOnly />
+        <Editable readOnly={!editable} />
       </Slate>
     </div>
   );
