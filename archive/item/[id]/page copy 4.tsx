@@ -2,11 +2,11 @@
 "use client";
 import WebEditor from "@/app/test/web-editor";
 import {
-  delivery,
-  detail,
-  options,
-  reviews,
-  subDetails,
+  Delivery,
+  Detail,
+  Options,
+  Reviews,
+  SubDetails,
 } from "@/types/received-data";
 import Image from "next/image";
 import Link from "next/link";
@@ -37,7 +37,7 @@ const ProductDetail = () => {
   const [ctry, setCtry] = useState("US");
 
   // 상품 세부 정보를 담은 객체입니다.
-  const detail: detail = {
+  const detail: Detail = {
     // product id, 상품 아이디, 상품을 구별하기 위해 사용합니다.
     pId: "111",
     // seller name, 판매자 이름입니다. 판매자 이름을 클릭(/seller/deuper)하면 판매자가 판매자는 상품의 목록을 볼 수 있습니다.
@@ -112,7 +112,7 @@ const ProductDetail = () => {
   };
 
   // 옵션을 선택한 특정 상품에 해당하는 내용입니다.
-  const subDetails: subDetails = {
+  const subDetails: SubDetails = {
     // product sub id, 하위 상품 아이디
     pSubId: "234",
     // product images, 판매자가 올린 상품 이미지의 주소 배열입니다.
@@ -148,7 +148,7 @@ const ProductDetail = () => {
   };
 
   // 특정 상품의 배송과 관련된 내용입니다.
-  const delivery: delivery = {
+  const delivery: Delivery = {
     // delivery fee, 배송비, 구매자가 지정한 국가를 기준으로 배송비를 산정한 금액입니다. 상품의 위치와 배송지의 거리를 기준으로 요금이 달라집니다. 사용자가 배송지를 바꿀 때마다 데이터를 요청해서 조건에 맞는 데이터를 가져옵니다.
     dFee: 100000,
     // Delivery Date,
@@ -260,7 +260,7 @@ const ProductDetail = () => {
     );
   }
 
-  function printOptions(options: options) {
+  function printOptions(options: Options) {
     const { type, able } = options;
     const opt = searchParam.get("opt") || "00"; // 선택한 옵션 명에서 순서 1번에서 1번, 2번에서 1번 이런 식으로, option
     const lst = searchParam.get("lst") || 0; // 마지막으로 선택한 옵션 // last select
@@ -335,7 +335,7 @@ const ProductDetail = () => {
     return allOptions.map((o, i) => <div key={`optionType${i}`}>{o}</div>);
   }
 
-  function printReviews(reviews: reviews) {
+  function printReviews(reviews: Reviews) {
     return reviews.content.map((c) => {
       const { rId, rText, rating, rImgs, rvideo } = c;
       return (
@@ -361,7 +361,7 @@ const ProductDetail = () => {
     });
   }
 
-  function printDelivery(delivery: delivery) {
+  function printDelivery(delivery: Delivery) {
     const { dFee, dDate, dImpCharge, ableCtry } = delivery;
 
     if (!ableCtry.includes("KR")) {

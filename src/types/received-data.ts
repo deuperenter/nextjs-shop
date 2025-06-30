@@ -1,4 +1,6 @@
-export type reviews = {
+import { StringArray } from "./utils";
+
+export type Reviews = {
   content: {
     rId: string;
     uName: string;
@@ -13,17 +15,16 @@ export type reviews = {
   }[];
 };
 
-export type options = {
-  // [k: string]: { [k: string]: string }[]은 이 코드 뒤에 설명이 있습니다.
-  type: { [k: string]: string[] | { [k: string]: string }[] };
+export type Options = {
+  type: { [k: string]: string[] | StringArray };
   able: string[];
 };
 
-export type detail = {
+export type Detail = {
   pId: string;
   category: string[];
   seller: string;
-  options?: options;
+  options?: Options;
   rating: {
     totalRating: number;
     ratingScore: number;
@@ -35,10 +36,10 @@ export type detail = {
   };
   fromSelImg?: string[];
   pDesc: string;
-  reviews: reviews;
+  reviews: Reviews;
 };
 
-export type subDetails = {
+export type SubDetails = {
   pSubId: string;
   pImgs: string[];
   pVideo?: string[];
@@ -51,7 +52,7 @@ export type subDetails = {
   pInfo: string;
 };
 
-export type delivery = {
+export type Delivery = {
   dFee: number;
   dDate: string;
   dImpCharge: number;

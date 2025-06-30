@@ -10,11 +10,74 @@ import {
 } from "@/types/received-data";
 import Image from "next/image";
 import Link from "next/link";
-import { useParams, useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { redirect, useParams, useSearchParams } from "next/navigation";
+import { Dispatch, memo, SetStateAction, useState } from "react";
 
+// 전역 변수
+// next.js 서버에서 저장해서 사용할 값
 const nation: string[] = ["US", "KR", "CA"];
-const SelectCtry = ({ ctry, setCtry }) => {
+const monUnitChart: { [k: string]: string }[] = [
+  { US: "$" },
+  { KR: "₩" },
+  { CA: "$" },
+];
+
+// 환율 API로 대체할 값
+const exchangeRates: { [k: string]: number }[] = [
+  { US: 1 },
+  { KR: 1350 },
+  { CA: 1.37 },
+];
+
+// 유틸 함수
+function monUnitSymbol(cCtry: string) {
+  for (const monUnit of monUnitChart) {
+    if (monUnit[cCtry]) {
+      return monUnit[cCtry];
+    }
+  }
+}
+
+function exchangePriceCallback(pCtry: string, cCtry: string) {
+  if (pCtry === cCtry) {
+    return function (pPrice: number) {
+      return pPrice;
+    };
+  }
+
+  let pCtryPrice: number = 0;
+  let cCtryPrice: number = 0;
+  for (const exchangeRate of exchangeRates) {
+    if (exchangeRate[pCtry]) {
+      pCtryPrice = exchangeRate[pCtry];
+    }
+
+    if (exchangeRate[cCtry]) {
+      cCtryPrice = exchangeRate[cCtry];
+    }
+  }
+  if (cCtryPrice && pCtryPrice) {
+    return function (pPrice: number) {
+      // 소수점을 쓰는 나라인 경우 소수점 2자리 표기
+      if (["US", "CA"].includes(cCtry)) {
+        return Math.ceil(((pPrice * cCtryPrice) / pCtryPrice) * 100) / 100;
+      }
+      return Math.ceil((pPrice * cCtryPrice) / pCtryPrice);
+    };
+  } else {
+    throw new Error("상품의 국가 표기가 잘못됐습니다.");
+  }
+}
+
+// 최적화 관련 자식 컴포넌트
+// 부모 컴포넌트의 state 쓰는 거라 최적화 안함
+function SelectCtry({
+  ctry,
+  setCtry,
+}: {
+  ctry: string;
+  setCtry: Dispatch<SetStateAction<string>>;
+}) {
   return (
     <>
       <select
@@ -28,15 +91,185 @@ const SelectCtry = ({ ctry, setCtry }) => {
       </select>
     </>
   );
-};
+}
 
-const ProductDetail = () => {
+const ShowStock = memo(function ShowStock({ stock }: { stock: number }) {
+  if (!stock) {
+    return <p>재고 없음</p>;
+  }
+  const selection = [];
+  for (let i = 1; i <= stock && i <= 30; i++) {
+    selection.push(<option key={`stock${i}`}>{i}</option>);
+  }
+  return (
+    <p>
+      수량: <select id="stock">{selection}</select>
+    </p>
+  );
+});
+
+const PrintOptions = memo(function PrintOptions({
+  options,
+}: {
+  options: Options;
+}) {
   const { id } = useParams();
   const searchParam = useSearchParams();
+  const { type, able } = options;
 
+  const opt = searchParam.get("opt") || able[0]; // 선택한 옵션 명에서 순서 1번에서 1번, 2번에서 1번 이런 식으로, option
+  const lst = searchParam.get("lst") || 0; // 마지막으로 선택한 옵션 // last select
+  const possible = able.filter((e) => e[+lst] === opt[+lst]);
+
+  if (
+    !able.filter((a) => a === opt).length ||
+    isNaN(+lst) ||
+    +lst > opt.length - 1
+  ) {
+    redirect(`/item/${id}/`);
+  }
+
+  const allOptions = [];
+  let digit = -1;
+  for (const title in type) {
+    digit++;
+    const someOptions = [];
+    let optOrder = -1;
+
+    for (const content of type[title]) {
+      optOrder++;
+      let option;
+      let newOpt;
+      let check = "";
+      for (const a of able) {
+        if (a[digit] === `${optOrder}`) {
+          newOpt = a;
+          break;
+        }
+      }
+      if (opt[digit] === `${optOrder}`) {
+        newOpt = opt;
+        check += "this";
+      } else {
+        possible.forEach((p) => {
+          if (p[digit] === `${optOrder}`) {
+            check += "pos";
+            newOpt = `${opt.substring(0, digit)}${optOrder}${opt.substring(
+              digit + 1
+            )}`;
+          }
+        });
+      }
+      if (content instanceof Object) {
+        const subTitle = Object.getOwnPropertyNames(content)[0];
+        const img = content[subTitle];
+        option = (
+          <Link key={subTitle} href={`/item/${id}?opt=${newOpt}&lst=${digit}`}>
+            <button key={subTitle}>
+              <Image
+                key={`optionImg${subTitle}`}
+                src={img}
+                alt={`${title}${subTitle}`}
+                width={65}
+                height={65}
+              />
+              <div>{check}</div>
+              <div>{subTitle}</div>
+            </button>
+          </Link>
+        );
+      } else {
+        option = (
+          <Link key={content} href={`/item/${id}?opt=${newOpt}&lst=${digit}`}>
+            <button key={content}>
+              <div>{check}</div>
+              {content}
+            </button>
+          </Link>
+        );
+      }
+      someOptions.push(option);
+    }
+    allOptions.push(someOptions);
+  }
+  return allOptions.map((o, i) => <div key={`optionType${i}`}>{o}</div>);
+});
+
+const PrintReviews = memo(function PrintReviews({
+  reviews,
+}: {
+  reviews: Reviews;
+}) {
+  return reviews.content.map((c) => {
+    const { rId, rText, rating, rImgs, rvideo } = c;
+    return (
+      <div key={rId}>
+        <div>{rating}</div>
+        <div>{rText}</div>
+        {rImgs?.map((img, i) => (
+          <Image
+            key={`rImage${i}`}
+            alt={`reviewImg${i}`}
+            src={img}
+            width={250}
+            height={250}
+          />
+        ))}
+        {rvideo && (
+          <video width={320} height={320} controls preload="none">
+            <source src={rvideo[0]} type="video/mp4" />
+          </video>
+        )}
+      </div>
+    );
+  });
+});
+
+// 얘도 최적화 안 함: ctry에 따라 바뀌는 값이 존재하기 때문에
+function PrintDelivery({
+  delivery,
+  cMonUnit,
+  discountPrice,
+  exchangePrice,
+}: {
+  delivery: Delivery;
+  cMonUnit: string;
+  discountPrice: number;
+  exchangePrice: (pPrice: number) => number;
+}) {
+  const { dFee, dDate, dImpCharge, ableCtry } = delivery;
+
+  if (!ableCtry.includes("KR")) {
+    return "현재 지역은 배송 불가능합니다.";
+  }
+
+  return (
+    <>
+      <p>
+        가격: {cMonUnit}
+        {discountPrice}
+      </p>
+      <p>
+        배송비: {cMonUnit}
+        {exchangePrice(dFee)}
+      </p>
+      <p>
+        관세: {cMonUnit}
+        {exchangePrice(dImpCharge)}
+      </p>
+      <p>
+        총합: {cMonUnit}
+        {discountPrice + exchangePrice(dFee) + exchangePrice(dImpCharge)}
+      </p>
+      <p>배송 가능 날짜: {dDate}</p>
+    </>
+  );
+}
+
+const ProductDetail = () => {
   const [ctry, setCtry] = useState("US");
 
-  // 상품 세부 정보를 담은 객체입니다.
+  // 데이터베이스에서 받은 값, detail은 안 변하고, subDetails, delivery는 조작에 따라 변할 수 있습니다.
   const detail: Detail = {
     // product id, 상품 아이디, 상품을 구별하기 위해 사용합니다.
     pId: "111",
@@ -110,8 +343,6 @@ const ProductDetail = () => {
       ],
     },
   };
-
-  // 옵션을 선택한 특정 상품에 해당하는 내용입니다.
   const subDetails: SubDetails = {
     // product sub id, 하위 상품 아이디
     pSubId: "234",
@@ -146,8 +377,6 @@ const ProductDetail = () => {
     pInfo: `[{"type":"paragraph","children":[{"text":"tech Detail"}]},{"type":"paragraph","children":[{"text":""}]},{"type":"paragraph","children":[{"text":"Summary"}]},{"type":"paragraph","children":[{"text":"Display: 14 inches"}]},{"type":"paragraph","children":[{"text":"Resolution: 1920 x 1080 Pixles"}]},{"type":"paragraph","children":[{"text":"생략: 예시이기 때문에 이 정도까지만 하겠습니다."}]},{"type":"paragraph","children":[{"text":""}]},{"type":"paragraph","children":[{"text":"etc"}]},{"type":"paragraph","children":[{"text":"Brand: EnterDeuper"}]},{"type":"paragraph","children":[{"text":"Hardware Platform: PC"}]},{"type":"paragraph","children":[{"text":""}]},{"type":"paragraph","children":[{"text":"additional info"}]},{"type":"paragraph","children":[{"text":"regestration date: 2025-06-27"}]}]`,
     // 위 제품과 비슷한 상품 목록이나, 사용자의 쇼핑몰 데이터 기반으로 상품 목록을 보여주는 것은 데이터를 만들기 힘들기 때문에 제외했습니다.
   };
-
-  // 특정 상품의 배송과 관련된 내용입니다.
   const delivery: Delivery = {
     // delivery fee, 배송비, 구매자가 지정한 국가를 기준으로 배송비를 산정한 금액입니다. 상품의 위치와 배송지의 거리를 기준으로 요금이 달라집니다. 사용자가 배송지를 바꿀 때마다 데이터를 요청해서 조건에 맞는 데이터를 가져옵니다.
     dFee: 100000,
@@ -159,8 +388,8 @@ const ProductDetail = () => {
     ableCtry: ["US", "CA", "KR"],
   };
 
-  // 객체 구조 분해 할당
-  const { pId, seller, options, fromSelImg, pDesc, reviews } = detail;
+  const { pId, category, seller, rating, options, fromSelImg, pDesc, reviews } =
+    detail;
   const {
     pImgs,
     pVideo,
@@ -173,207 +402,12 @@ const ProductDetail = () => {
     pInfo,
   } = subDetails;
 
-  // 화폐 단위나 환율 계산
-  // current country: 현재 국가, 이것은 사용자가 설정한 값이나, ip 주소를 통해 알아낸 값입니다.
-
-  // console.log(localStorage.getItem("ctry"));
-
-  const monUnitChart: { [k: string]: string }[] = [
-    { US: "$" },
-    { KR: "₩" },
-    { CA: "$" },
-  ];
-
-  // 나중에 타입 한 번에 추출할 것입니다.
-  function monUnitSymbol(cCtry: string) {
-    for (const monUnit of monUnitChart) {
-      if (monUnit[cCtry]) {
-        return monUnit[cCtry];
-      }
-    }
-  }
-
-  // 현재 화폐 단위: 사이트에서 설정한 국가를 기준한다. 합니다.
-  const cMonUnit = monUnitSymbol(ctry);
-
-  // 배송비 관련된 내용은 상품을 판매하는 국가를 기준으로 합니다.
-
-  // 환율은 미국 1달러 기준입니다. 환율은 나중에 API를 통해서 받아오면 됩니다.
-  const exchangeRates: { [k: string]: number }[] = [
-    { US: 1 },
-    { KR: 1350 },
-    { CA: 1.37 },
-  ];
-
-  // 환율을 구하는 함수입니다.
-  function exchangePriceCallback(pCtry: string, cCtry: string) {
-    if (pCtry === cCtry) {
-      return function (pPrice: number) {
-        return pPrice;
-      };
-    }
-
-    let pCtryPrice: number = 0;
-    let cCtryPrice: number = 0;
-    for (const exchangeRate of exchangeRates) {
-      if (exchangeRate[pCtry]) {
-        pCtryPrice = exchangeRate[pCtry];
-      }
-
-      if (exchangeRate[cCtry]) {
-        cCtryPrice = exchangeRate[cCtry];
-      }
-    }
-    if (cCtryPrice && pCtryPrice) {
-      return function (pPrice: number) {
-        // 소수점을 쓰는 나라인 경우 소수점 2자리 표기
-        if (["US", "CA"].includes(cCtry)) {
-          return Math.ceil(((pPrice * cCtryPrice) / pCtryPrice) * 100) / 100;
-        }
-        return Math.ceil((pPrice * cCtryPrice) / pCtryPrice);
-      };
-    } else {
-      throw new Error("상품의 국가 표기가 잘못됐습니다.");
-    }
-  }
-
-  // 함수 API를 사용하면 exchangeRates와 exchangeRate는 함수 API로 대체됩니다.
+  // 컴포넌트 내 최상위 지역 변수
+  const cMonUnit = monUnitSymbol(ctry) || "$";
   const exchangePrice = exchangePriceCallback(pCtry, ctry);
-
   const discountPrice = discount
     ? Math.ceil((exchangePrice(pPrice) * (100 - discount)) / 100)
     : exchangePrice(pPrice);
-
-  // 출력할 내용을 반환하는 함수
-  function showStock(stock: number) {
-    if (!stock) {
-      return <p>재고 없음</p>;
-    }
-    const selection = [];
-    for (let i = 1; i <= stock && i <= 30; i++) {
-      selection.push(<option key={`stock${i}`}>{i}</option>);
-    }
-    return (
-      <p>
-        수량: <select id="stock">{selection}</select>
-      </p>
-    );
-  }
-
-  function printOptions(options: Options) {
-    const { type, able } = options;
-    // Dell 방식은 없는 값이면 다른 타입의 가장 첫 번째 값으로 변경하는 방식이다.
-    // Amazon 방식은 조합 중에서 사용가능한 조합을 보여주는 방식이다. red를 클릭했을 때 가능한 조합, 500GB를 클릭했을 때 가능한 조합 이런 식으로 말이다.
-    // 근데 생각해보니 비슷한 방식이다. Dell도 옵션 항목을 없애지 않을 뿐이다. Amazon 모니터 항목 들어가보고 알았다.
-    // 자잘한 옵션을 바꾸는 것은 허용 근데. 아예 다른 제품으로 이동하는 건 지양: 모니터는 안 됨. 식기대 크기, 색상 바꾸는 것은 가능
-    // 우선순위는 사용자가 정하는 것이다.
-    const amount = "0123456789abcdefghijklmnopqrstuvwxyz"; // 한 타입이 35가지 경우가 가능하다. chatAt를 쓸 수도?
-    console.log(able);
-    const st = searchParam.get("st") || "10"; // 아무것도 선택 안 했을 때 "00"
-    const op = searchParam.get("op") || "10"; // 10 01 - 마지막으로 이 요소를 선택했다.
-    // 사용자가 커스텀하게 진짜 원하는 옵션은 존재하지 않을 수 있다. 이걸 어떻게 할 수는 없다. 색깔과 용랑 중에서 포기를 해야 한다.
-    // 그냥 통제하고 싶지 않다. 옵션을 계속 선택하는 데 옵션이 없으면 다른 옵션 보여주기
-    console.log("a".charCodeAt(0));
-
-    // [ "00", "01", "02", "10", "11", "20", "30" ]
-
-    console.log(op, st);
-
-    // 버튼 링크: 존재하지 않는 경우 "", 있는 경우 번호 표기
-    // able의 형태와 sid와 생각을 좀 하자
-    // 선택된 옵션도 알아야 한다. 선택된 옵션 1개를 기준으로 가능한 옵션을 표기. 선택됨 옵션: 02, 12 - 가능 옵션과 다르다. 첫 번째 옵션에서 3번째, 두 번째 옵션에서 3번째 | 가능은: 첫 번째 옵션 첫 번째와 두 번째 옵션 세 번째를 선택. 기본 값은 첫 번째 옵션의 첫 번째
-
-    const allOptions = [];
-    for (const title in type) {
-      const someOptions = [];
-      for (const content of type[title]) {
-        let option;
-        if (content instanceof Object) {
-          const subTitle = Object.getOwnPropertyNames(content)[0];
-          const img = content[subTitle];
-          option = (
-            <Link key={subTitle} href={`/item/${id}/`}>
-              <button key={subTitle}>
-                <Image
-                  key={`optionImg${subTitle}`}
-                  src={img}
-                  alt={`${title}${subTitle}`}
-                  width={50}
-                  height={50}
-                />
-                <div>{subTitle}</div>
-              </button>
-            </Link>
-          );
-        } else {
-          option = (
-            <Link key={content} href={`/item/${id}/`}>
-              <button key={content}>{content}</button>
-            </Link>
-          );
-        }
-        someOptions.push(option);
-      }
-      allOptions.push(someOptions);
-    }
-    return allOptions.map((o, i) => <div key={`optionType${i}`}>{o}</div>);
-  }
-
-  function printReviews(reviews: Reviews) {
-    return reviews.content.map((c) => {
-      const { rId, rText, rating, rImgs, rvideo } = c;
-      return (
-        <div key={rId}>
-          <div>{rating}</div>
-          <div>{rText}</div>
-          {rImgs?.map((img, i) => (
-            <Image
-              key={`rImage${i}`}
-              alt={`reviewImg${i}`}
-              src={img}
-              width={250}
-              height={250}
-            />
-          ))}
-          {rvideo && (
-            <video width={320} height={320} controls preload="none">
-              <source src={rvideo[0]} type="video/mp4" />
-            </video>
-          )}
-        </div>
-      );
-    });
-  }
-
-  function printDelivery(delivery: Delivery) {
-    const { dFee, dDate, dImpCharge, ableCtry } = delivery;
-
-    if (!ableCtry.includes("KR")) {
-      return "현재 지역은 배송 불가능합니다.";
-    }
-
-    return (
-      <>
-        <p>
-          가격: {cMonUnit}
-          {discountPrice}
-        </p>
-        <p>
-          배송비: {cMonUnit}
-          {exchangePrice(dFee)}
-        </p>
-        <p>
-          관세: {cMonUnit}
-          {exchangePrice(dImpCharge)}
-        </p>
-        <p>
-          총합: {cMonUnit}
-          {discountPrice + exchangePrice(dFee) + exchangePrice(dImpCharge)}
-        </p>
-        <p>배송 가능 날짜: {dDate}</p>
-      </>
-    );
-  }
 
   // 웹 페이지에 출력할 내용
   return (
@@ -386,7 +420,7 @@ const ProductDetail = () => {
         </video>
       )}
       <p>{pName}</p>
-      {options && printOptions(options)}
+      {options && <PrintOptions options={options} />}
       <p>{seller}</p>
       <p>
         <Link href={`/seller/${seller}`}>{seller}의 다른 상품 보기</Link>
@@ -398,11 +432,15 @@ const ProductDetail = () => {
           {cMonUnit}${discountPrice}
         </p>
       )}
-      {discount && <p>정가: {exchangePrice(pPrice)}</p>}
-      {/* 그냥 <Editable readOnly /> 하면 된다. 프리뷰도 필요 없다. */}
-      {showStock(stock)}
+      {discount && <p>정가: {`${cMonUnit}${exchangePrice(pPrice)}`}</p>}
+      <ShowStock stock={stock} />
       <WebEditor editable={true} initial={feature} />
-      {printDelivery(delivery)}
+      <PrintDelivery
+        delivery={delivery}
+        cMonUnit={cMonUnit}
+        discountPrice={discountPrice}
+        exchangePrice={exchangePrice}
+      />
       <WebEditor editable={true} initial={pInfo} />
       {fromSelImg?.map((fImg, i) => (
         <Image
@@ -416,7 +454,7 @@ const ProductDetail = () => {
       <p>제품 설명</p>
       <p>{pDesc}</p>
       <p>리뷰 보기</p>
-      {printReviews(reviews)}
+      <PrintReviews reviews={reviews} />
       <p>
         <Link href={`/reviews/${pId}`}>리뷰 더 보기</Link>
       </p>

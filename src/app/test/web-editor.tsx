@@ -13,7 +13,7 @@ declare module "slate" {
   }
 }
 
-import { useMemo, useState } from "react";
+import { memo, useMemo, useState } from "react";
 import { createEditor } from "slate";
 import { Slate, Editable, withReact } from "slate-react";
 
@@ -22,7 +22,7 @@ type editorProps = {
   initial: string;
 };
 
-const WebEditor = ({ editable, initial }: editorProps) => {
+const WebEditor = memo(function WebEditor({ editable, initial }: editorProps) {
   const [editor] = useState(() => withReact(createEditor()));
   // Update the initial content to be pulled from Local Storage if it exists.
   const initialValue = useMemo(
@@ -57,6 +57,6 @@ const WebEditor = ({ editable, initial }: editorProps) => {
       </Slate>
     </div>
   );
-};
+});
 
 export default WebEditor;

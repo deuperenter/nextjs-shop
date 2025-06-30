@@ -1,3 +1,5 @@
+// 나중에 서버 사이드 컴포넌트와 클라이언트 사이드 컴포넌트를 구분해야 한다.
+"use client";
 import WebEditor from "@/app/test/web-editor";
 import {
   Delivery,
@@ -8,24 +10,36 @@ import {
 } from "@/types/received-data";
 import Image from "next/image";
 import Link from "next/link";
+import { redirect, useParams, useSearchParams } from "next/navigation";
+import { Dispatch, SetStateAction, useState } from "react";
 
-const ProductDetail = async ({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) => {
-  const { id } = await params;
+type state = {
+  ctry: string;
+  setCtry: Dispatch<SetStateAction<string>>;
+};
 
-  // 언어별로 카테고리 명을 다르고 보여줍니다.
-  const ctry = ["US", "KR", "CA"];
+const nation: string[] = ["US", "KR", "CA"];
+const SelectCtry = ({ ctry, setCtry }: state) => {
+  return (
+    <>
+      <select
+        id="selectCtry"
+        onChange={(e) => setCtry(e.target.value)}
+        defaultValue={ctry}
+      >
+        {nation.map((n, i) => (
+          <option key={`ctry${i}`}>{n}</option>
+        ))}
+      </select>
+    </>
+  );
+};
 
-  // 미국 단어를 기준으로 변환할 단어 목록입니다.
-  const interCategory = {
-    electronics: [{ KR: "전자기기", CA: "electronics" }],
-    computer: [{ KR: "컴퓨터", CA: "computer" }],
-    laptop: [{ KR: "노트북", CA: "laptop" }],
-    netbook: [{ KR: "넷북", CA: "netbook" }],
-  };
+const ProductDetail = () => {
+  const { id } = useParams();
+  const searchParam = useSearchParams();
+
+  const [ctry, setCtry] = useState("US");
 
   // 상품 세부 정보를 담은 객체입니다.
   const detail: Detail = {
@@ -166,7 +180,8 @@ const ProductDetail = async ({
 
   // 화폐 단위나 환율 계산
   // current country: 현재 국가, 이것은 사용자가 설정한 값이나, ip 주소를 통해 알아낸 값입니다.
-  const cCtry = "US";
+
+  // console.log(localStorage.getItem("ctry"));
 
   const monUnitChart: { [k: string]: string }[] = [
     { US: "$" },
@@ -184,7 +199,7 @@ const ProductDetail = async ({
   }
 
   // 현재 화폐 단위: 사이트에서 설정한 국가를 기준한다. 합니다.
-  const cMonUnit = monUnitSymbol(cCtry);
+  const cMonUnit = monUnitSymbol(ctry);
 
   // 배송비 관련된 내용은 상품을 판매하는 국가를 기준으로 합니다.
 
@@ -196,9 +211,11 @@ const ProductDetail = async ({
   ];
 
   // 환율을 구하는 함수입니다.
-  function exchangeRateConverter(pCtry: string, cCtry: string) {
+  function exchangePriceCallback(pCtry: string, cCtry: string) {
     if (pCtry === cCtry) {
-      return price;
+      return function (pPrice: number) {
+        return pPrice;
+      };
     }
 
     let pCtryPrice: number = 0;
@@ -213,22 +230,24 @@ const ProductDetail = async ({
       }
     }
     if (cCtryPrice && pCtryPrice) {
-      return cCtryPrice / pCtryPrice;
+      return function (pPrice: number) {
+        // 소수점을 쓰는 나라인 경우 소수점 2자리 표기
+        if (["US", "CA"].includes(cCtry)) {
+          return Math.ceil(((pPrice * cCtryPrice) / pCtryPrice) * 100) / 100;
+        }
+        return Math.ceil((pPrice * cCtryPrice) / pCtryPrice);
+      };
     } else {
       throw new Error("상품의 국가 표기가 잘못됐습니다.");
     }
   }
 
   // 함수 API를 사용하면 exchangeRates와 exchangeRate는 함수 API로 대체됩니다.
-  function exchangePrice(pPrice: number, exchangeRate: number) {
-    return Math.ceil(pPrice * exchangeRate);
-  }
+  const exchangePrice = exchangePriceCallback(pCtry, ctry);
 
-  const exchangeRate = exchangeRateConverter(pCtry, cCtry);
-
-  const price = exchangePrice(pPrice, exchangeRate);
-
-  console.log(price);
+  const discountPrice = discount
+    ? Math.ceil((exchangePrice(pPrice) * (100 - discount)) / 100)
+    : exchangePrice(pPrice);
 
   // 출력할 내용을 반환하는 함수
   function showStock(stock: number) {
@@ -246,31 +265,83 @@ const ProductDetail = async ({
     );
   }
 
+  // 조합이 너무 많아서 렉이 걸리는 경우? 경우에 생각해보도록 하자
   function printOptions(options: Options) {
     const { type, able } = options;
-    // 불가능한 옵션을 선택한 경우 기본값으로 이동하는 방식 Dell의 방식을 가져왔다.
+    const opt = searchParam.get("opt") || able[0]; // 선택한 옵션 명에서 순서 1번에서 1번, 2번에서 1번 이런 식으로, option
+    const lst = searchParam.get("lst") || 0; // 마지막으로 선택한 옵션 // last select
+    const possible = able.filter((e) => e[+lst] === opt[+lst]);
+
+    // 오류 방지
+    if (
+      !able.filter((a) => a === opt).length ||
+      isNaN(+lst) ||
+      +lst > opt.length - 1
+    ) {
+      redirect(`/item/${id}/`);
+    }
+
     const allOptions = [];
+    let digit = -1;
     for (const title in type) {
+      digit++;
       const someOptions = [];
+      let optOrder = -1;
+
       for (const content of type[title]) {
+        optOrder++;
         let option;
+        let newOpt;
+        let check = "";
+        for (const a of able) {
+          if (a[digit] === `${optOrder}`) {
+            newOpt = a;
+            break;
+          }
+        }
+        if (opt[digit] === `${optOrder}`) {
+          newOpt = opt;
+          check += "this";
+        } else {
+          possible.forEach((p) => {
+            if (p[digit] === `${optOrder}`) {
+              check += "pos";
+              newOpt = `${opt.substring(0, digit)}${optOrder}${opt.substring(
+                digit + 1
+              )}`;
+            }
+          });
+        }
         if (content instanceof Object) {
           const subTitle = Object.getOwnPropertyNames(content)[0];
           const img = content[subTitle];
           option = (
-            <button key={subTitle}>
-              <Image
-                key={`optionImg${subTitle}`}
-                src={img}
-                alt={`${title}${subTitle}`}
-                width={50}
-                height={50}
-              />
-              <div>{subTitle}</div>
-            </button>
+            <Link
+              key={subTitle}
+              href={`/item/${id}?opt=${newOpt}&lst=${digit}`}
+            >
+              <button key={subTitle}>
+                <Image
+                  key={`optionImg${subTitle}`}
+                  src={img}
+                  alt={`${title}${subTitle}`}
+                  width={65}
+                  height={65}
+                />
+                <div>{check}</div>
+                <div>{subTitle}</div>
+              </button>
+            </Link>
           );
         } else {
-          option = <button key={content}>{content}</button>;
+          option = (
+            <Link key={content} href={`/item/${id}?opt=${newOpt}&lst=${digit}`}>
+              <button key={content}>
+                <div>{check}</div>
+                {content}
+              </button>
+            </Link>
+          );
         }
         someOptions.push(option);
       }
@@ -315,20 +386,20 @@ const ProductDetail = async ({
     return (
       <>
         <p>
-          정가: {cMonUnit}
-          {pPrice}
+          가격: {cMonUnit}
+          {discountPrice}
         </p>
         <p>
           배송비: {cMonUnit}
-          {dFee}
+          {exchangePrice(dFee)}
         </p>
         <p>
           관세: {cMonUnit}
-          {dImpCharge}
+          {exchangePrice(dImpCharge)}
         </p>
         <p>
-          전체 배송비: {cMonUnit}
-          {dFee + dImpCharge}
+          총합: {cMonUnit}
+          {discountPrice + exchangePrice(dFee) + exchangePrice(dImpCharge)}
         </p>
         <p>배송 가능 날짜: {dDate}</p>
       </>
@@ -338,6 +409,7 @@ const ProductDetail = async ({
   // 웹 페이지에 출력할 내용
   return (
     <div>
+      <SelectCtry ctry={ctry} setCtry={setCtry} />
       <Image src={pImgs[0]} alt="상품 이미지1" width={250} height={250} />
       {pVideo && (
         <video width={320} height={320} controls preload="none">
@@ -350,16 +422,17 @@ const ProductDetail = async ({
       <p>
         <Link href={`/seller/${seller}`}>{seller}의 다른 상품 보기</Link>
       </p>
-      {discount && (
+      {discount ? (
+        <p>{`-${discount}% ${cMonUnit}${discountPrice}`}</p>
+      ) : (
         <p>
-          {`-${discount}% ${cMonUnit}${Math.ceil(
-            (pPrice * (100 - discount)) / 100
-          )}`}
+          {cMonUnit}${discountPrice}
         </p>
       )}
+      {discount && <p>정가: {`${cMonUnit}${exchangePrice(pPrice)}`}</p>}
       {/* 그냥 <Editable readOnly /> 하면 된다. 프리뷰도 필요 없다. */}
-      <WebEditor editable={true} initial={feature} />
       {showStock(stock)}
+      <WebEditor editable={true} initial={feature} />
       {printDelivery(delivery)}
       <WebEditor editable={true} initial={pInfo} />
       {fromSelImg?.map((fImg, i) => (
