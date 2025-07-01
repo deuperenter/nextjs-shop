@@ -45,7 +45,7 @@ export function exchangePriceCallback(
 
 export function clacDiscount(
   discount: number | undefined,
-  exchangePrice: ExchangePrice,
+  exchangePrice: (pPrice: number) => number,
   pPrice: number
 ) {
   return discount

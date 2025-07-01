@@ -1,7 +1,4 @@
-"use client";
-import { memo } from "react";
-
-export const ShowStock = memo(function ShowStock({ stock }: { stock: number }) {
+const ShowStock = ({ stock }: { stock: number }) => {
   if (!stock) {
     return <p>재고 없음</p>;
   }
@@ -14,4 +11,6 @@ export const ShowStock = memo(function ShowStock({ stock }: { stock: number }) {
       수량: <select id="stock">{selection}</select>
     </p>
   );
-});
+};
+
+export default ShowStock;

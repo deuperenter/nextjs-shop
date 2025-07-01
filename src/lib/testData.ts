@@ -1,4 +1,4 @@
-import { Delivery, Detail, SubDetails } from "@/types/received-data";
+import { Delivery, Detail, SubDetails } from "@/types/receivedData";
 import { NumberArray, StringArray } from "@/types/utils";
 
 export const detailData: Detail = {

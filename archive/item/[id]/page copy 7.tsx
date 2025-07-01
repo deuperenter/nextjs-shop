@@ -1,13 +1,13 @@
 // 나중에 서버 사이드 컴포넌트와 클라이언트 사이드 컴포넌트를 구분해야 한다.
 "use client";
-import WebEditor from "@/app/test/web-editor";
+import WebEditor from "@/components/common/WebEditor";
 import {
   Delivery,
   Detail,
   Options,
   Reviews,
   SubDetails,
-} from "@/types/received-data";
+} from "@/types/receivedData";
 import Image from "next/image";
 import Link from "next/link";
 import { redirect, useParams, useSearchParams } from "next/navigation";

@@ -1,15 +1,8 @@
-"use client";
-import { Options } from "@/types/received-data";
+import { Options } from "@/types/receivedData";
 import Image from "next/image";
 import { redirect, useParams, useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
-import { memo } from "react";
-
-export const PrintOptions = memo(function PrintOptions({
-  options,
-}: {
-  options: Options;
-}) {
+const PrintOptions = ({ options }: { options: Options }) => {
   const { id } = useParams();
   const searchParam = useSearchParams();
   const { type, able } = options;
@@ -106,4 +99,6 @@ export const PrintOptions = memo(function PrintOptions({
     allOptions.push(someOptions);
   }
   return allOptions.map((o, i) => <div key={`optionType${i}`}>{o}</div>);
-});
+};
+
+export default PrintOptions;

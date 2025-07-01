@@ -2,7 +2,7 @@ import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 import PrintCategoryCSS from "./print-category.module.css";
-export const PrintCaterory = ({ category }: { category: string[] }) => {
+const PrintCaterory = ({ category }: { category: string[] }) => {
   const categoryStr = [];
   for (let i = 0; i < category.length; i++) {
     categoryStr.push(
@@ -28,3 +28,5 @@ export const PrintCaterory = ({ category }: { category: string[] }) => {
   }
   return <div className={PrintCategoryCSS.bar}>{categoryStr}</div>;
 };
+
+export default PrintCaterory;

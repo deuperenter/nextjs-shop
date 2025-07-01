@@ -1,17 +1,13 @@
-"use client";
-import { Reviews } from "@/types/received-data";
+import { Reviews } from "@/types/receivedData";
 import Image from "next/image";
-import { memo } from "react";
+import Link from "next/link";
 
-export const PrintReviews = memo(function PrintReviews({
-  reviews,
-}: {
-  reviews: Reviews;
-}) {
+const PrintReviews = ({ reviews, pId }: { reviews: Reviews; pId: string }) => {
   return reviews.content.map((c) => {
     const { rId, rText, rating, rImgs, rvideo } = c;
     return (
       <div key={rId}>
+        <p>리뷰 보기</p>
         <div>{rating}</div>
         <div>{rText}</div>
         {rImgs?.map((img, i) => (
@@ -28,7 +24,12 @@ export const PrintReviews = memo(function PrintReviews({
             <source src={rvideo[0]} type="video/mp4" />
           </video>
         )}
+        <p>
+          <Link href={`/reviews/${pId}`}>리뷰 더 보기</Link>
+        </p>
       </div>
     );
   });
-});
+};
+
+export default PrintReviews;

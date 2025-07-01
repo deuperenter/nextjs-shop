@@ -1,11 +1,11 @@
-import WebEditor from "@/app/test/web-editor";
+import WebEditor from "@/components/common/WebEditor";
 import {
   Delivery,
   Detail,
   Options,
   Reviews,
   SubDetails,
-} from "@/types/received-data";
+} from "@/types/receivedData";
 import Image from "next/image";
 import Link from "next/link";
 
