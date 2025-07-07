@@ -1,7 +1,8 @@
+"use client";
 import { useAppSelector } from "@/lib/store";
 import { exchangeRates, monUnitChart } from "@/lib/testData";
 import {
-  clacDiscount,
+  calcDiscount,
   exchangePriceCallback,
   monUnitSymbol,
 } from "@/lib/utils";
@@ -25,7 +26,7 @@ const PrintDelivery = ({
   const cMonUnit = monUnitSymbol(ctry, monUnitChart) || "$";
   const exchangePrice = exchangePriceCallback(pCtry, ctry, exchangeRates);
 
-  const discountPrice = clacDiscount(discount, exchangePrice, pPrice);
+  const discountPrice = calcDiscount(discount, exchangePrice, pPrice);
 
   if (!ableCtry.includes("KR")) {
     return "현재 지역은 배송 불가능합니다.";

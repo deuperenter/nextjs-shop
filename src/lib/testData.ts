@@ -1,55 +1,48 @@
 import { Delivery, Detail, SubDetails } from "@/types/receivedData";
-import { NumberArray, StringArray } from "@/types/utils";
+import { NumberObjectArray, StringObjectArray } from "@/types/utils";
 
 export const detailData: Detail = {
-  // product id, 상품 아이디, 상품을 구별하기 위해 사용합니다.
   pId: "111",
-  // seller name, 판매자 이름입니다. 판매자 이름을 클릭(/seller/deuper)하면 판매자가 판매자는 상품의 목록을 볼 수 있습니다.
-  // 카테고리 목록입니다. URL은 item/netbook으로 하면 됩니다. 분류는 2개 정도만 합니다.
   category: ["electronics", "netbook"],
   seller: "deuper",
-  // 옵션을 누르면 다른 상품을 보여줍니다. 모든 조합이 다 가능한 것은 아닙니다.
   rating: {
-    // 리뷰 개수
+    "1": 0,
+    "2": 1,
+    "3": 0,
+    "4": 0,
+    "5": 1,
     totalRating: 2,
-    // 평균 리뷰 점수
     ratingScore: 3.5,
-    // 리뷰 점수의 개수: 5점부터 1점
-    5: 1,
-    4: 0,
-    3: 0,
-    2: 1,
-    1: 0,
   },
   options: {
-    // 옵션별로 이름과, 섬네일 이미지 주소가 객체 배열로 있습니다. 섬네일이 없는 경우 배열 타입입니다.
     type: {
       color: [
-        { red: "/detail_ex/img_red.png" },
-        { blue: "/detail_ex/img_blue.png" },
-        { white: "/detail_ex/img_white.png" },
-        { black: "/detail_ex/img_black.png" },
+        {
+          red: "/detail_ex/img_red.png",
+        },
+        {
+          blue: "/detail_ex/img_blue.png",
+        },
+        {
+          white: "/detail_ex/img_white.png",
+        },
+        {
+          black: "/detail_ex/img_black.png",
+        },
       ],
       storage: ["500gb SSD", "1tb SSD", "2tb SSD"],
     },
-    // 가능한 조합만을 보여줍니다. 예시 color[0] - storage[0] = red, 500gb SSD는 가능
     able: ["00", "01", "02", "10", "11", "20", "30"],
   },
-  // 제조업체가 만든 상품 이미지입니다.
   fromSelImg: [
     "/detail_ex/from_sel_img1.png",
     "/detail_ex/from_sel_img2.png",
     "/detail_ex/from_sel_img3.png",
   ],
-  // 제조업체에서 제공하는 설명입니다.
   pDesc: "상품의 설명입니다.",
-  // 사용자 리뷰 배열입니다.
   reviews: {
-    // 리뷰 전체를 보여주지 않고 소량의 리뷰만 보여줍니다.
-    // 리뷰 내용
     content: [
       {
-        // review id: 번호, text: 내용, rating: 평가, rImgs: 리뷰 이미지들, 리뷰 동영상 주소입니다.
         rId: "1",
         uName: "Weight",
         uCtry: "US",
@@ -122,17 +115,21 @@ export const deliveryData: Delivery = {
   ableCtry: ["US", "CA", "KR"],
 };
 
-export const monUnitChart: StringArray = [
+export const monUnitChart: StringObjectArray = [
   { US: "$" },
   { KR: "₩" },
   { CA: "$" },
 ];
 
 // 환율 API로 대체할 값
-export const exchangeRates: NumberArray = [
+export const exchangeRates: NumberObjectArray = [
   { US: 1 },
   { KR: 1350 },
   { CA: 1.37 },
 ];
 
-export const nation: string[] = ["US", "KR", "CA"];
+export const nation: string[][] = [
+  ["US", "United States"],
+  ["KR", "Republic Of Korea"],
+  ["CA", "Canada"],
+];

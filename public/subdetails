@@ -1,0 +1,30 @@
+{
+  "pSubId": "234",
+  "pImgs": [
+    "/detail_ex/img01.png",
+    "/detail_ex/img02.png",
+    "/detail_ex/img03.png",
+    "/detail_ex/img04.png",
+    "/detail_ex/img05.png",
+    "/detail_ex/img06.png",
+    "/detail_ex/img07.png",
+    "/detail_ex/img08.png",
+    "/detail_ex/img09.png",
+    "/detail_ex/img10.png"
+  ],
+  "pVideo": [
+    "/detail_ex/video1.mp4",
+    "/detail_ex/video2.mp4"
+  ],
+  "pVideoThumb": [
+    "/detail_ex/from_sel_img1.png",
+    "/detail_ex/from_sel_img2.png"
+  ],
+  "pName": "Lightweight Netbook, Color Red, 500GB SSD For Game",
+  "pPrice": 300000,
+  "pCtry": "KR",
+  "discount": 25,
+  "stock": 1000,
+  "feature": "[{\"type\":\"paragraph\",\"children\":[{\"text\":\"Portable: 어느 곳에서나 사용할 수 있습니다.\"}]},{\"type\":\"paragraph\",\"children\":[{\"text\":\"Storage: 용랑이 큰 SSD로 용랑이 큰 게임을 설치할 수 있습니다.\"}]}]",
+  "pInfo": "[{\"type\":\"paragraph\",\"children\":[{\"text\":\"tech Detail\"}]},{\"type\":\"paragraph\",\"children\":[{\"text\":\"\"}]},{\"type\":\"paragraph\",\"children\":[{\"text\":\"Summary\"}]},{\"type\":\"paragraph\",\"children\":[{\"text\":\"Display: 14 inches\"}]},{\"type\":\"paragraph\",\"children\":[{\"text\":\"Resolution: 1920 x 1080 Pixles\"}]},{\"type\":\"paragraph\",\"children\":[{\"text\":\"생략: 예시이기 때문에 이 정도까지만 하겠습니다.\"}]},{\"type\":\"paragraph\",\"children\":[{\"text\":\"\"}]},{\"type\":\"paragraph\",\"children\":[{\"text\":\"etc\"}]},{\"type\":\"paragraph\",\"children\":[{\"text\":\"Brand: EnterDeuper\"}]},{\"type\":\"paragraph\",\"children\":[{\"text\":\"Hardware Platform: PC\"}]},{\"type\":\"paragraph\",\"children\":[{\"text\":\"\"}]},{\"type\":\"paragraph\",\"children\":[{\"text\":\"additional info\"}]},{\"type\":\"paragraph\",\"children\":[{\"text\":\"regestration date: 2025-06-27\"}]}]"
+}

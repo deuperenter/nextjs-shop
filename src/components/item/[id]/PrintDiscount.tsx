@@ -1,7 +1,8 @@
+"use client";
 import { useAppSelector } from "@/lib/store";
 import { exchangeRates, monUnitChart } from "@/lib/testData";
 import {
-  clacDiscount,
+  calcDiscount,
   exchangePriceCallback,
   monUnitSymbol,
 } from "@/lib/utils";
@@ -21,14 +22,16 @@ export const PrintPrice = ({
 
   const exchangePrice = exchangePriceCallback(pCtry, ctry, exchangeRates);
 
-  const discountPrice = clacDiscount(discount, exchangePrice, pPrice);
+  const discountPrice = calcDiscount(discount, exchangePrice, pPrice);
 
   return (
     <div>
       {discount ? (
         <>
-          <p>{`-${discount}% ${cMonUnit}${discountPrice}`}</p>
-          <p>정가: {`${cMonUnit}${exchangePrice(pPrice)}`}</p>
+          <p className="font24">{`-${discount}% ${cMonUnit}${discountPrice}`}</p>
+          <p className="text-under">
+            정가: {`${cMonUnit}${exchangePrice(pPrice)}`}
+          </p>
         </>
       ) : (
         <p>

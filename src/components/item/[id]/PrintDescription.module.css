@@ -1,0 +1,13 @@
+.description {
+  display: flex;
+  flex-direction: column;
+}
+
+.noSpace {
+  font-size: 0px;
+}
+
+.imgs {
+  width: 100%;
+  height: auto;
+}

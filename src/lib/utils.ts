@@ -1,6 +1,6 @@
-import { ExchangePrice, NumberArray, StringArray } from "@/types/utils";
+import { NumberObjectArray, StringObjectArray } from "@/types/utils";
 
-export function monUnitSymbol(cCtry: string, monUnitChart: StringArray) {
+export function monUnitSymbol(cCtry: string, monUnitChart: StringObjectArray) {
   for (const monUnit of monUnitChart) {
     if (monUnit[cCtry]) {
       return monUnit[cCtry];
@@ -11,7 +11,7 @@ export function monUnitSymbol(cCtry: string, monUnitChart: StringArray) {
 export function exchangePriceCallback(
   pCtry: string,
   cCtry: string,
-  exchangeRates: NumberArray
+  exchangeRates: NumberObjectArray
 ) {
   if (pCtry === cCtry) {
     return function (pPrice: number) {
@@ -43,7 +43,7 @@ export function exchangePriceCallback(
   }
 }
 
-export function clacDiscount(
+export function calcDiscount(
   discount: number | undefined,
   exchangePrice: (pPrice: number) => number,
   pPrice: number
@@ -52,3 +52,6 @@ export function clacDiscount(
     ? Math.ceil((exchangePrice(pPrice) * (100 - discount)) / 100)
     : exchangePrice(pPrice);
 }
+
+export const REPORT_SUCCESS = ["신고 완료했습니다."];
+export const ALERT_FAILED = ["오류가 발생했습니다.", "관리자에게 문의해주세요"];

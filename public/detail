@@ -1,0 +1,108 @@
+{
+  "pId": "111",
+  "category": [
+    "electronics",
+    "netbook"
+  ],
+  "seller": "deuper",
+  "rating": {
+    "1": 0,
+    "2": 1,
+    "3": 0,
+    "4": 0,
+    "5": 1,
+    "totalRating": 2,
+    "ratingScore": 3.5
+  },
+  "options": {
+    "type": {
+      "color": [
+        {
+          "red": "/detail_ex/img_red.png"
+        },
+        {
+          "blue": "/detail_ex/img_blue.png"
+        },
+        {
+          "white": "/detail_ex/img_white.png"
+        },
+        {
+          "black": "/detail_ex/img_black.png"
+        }
+      ],
+      "storage": [
+        "500gb SSD",
+        "1tb SSD",
+        "2tb SSD"
+      ]
+    },
+    "able": [
+      "00",
+      "01",
+      "02",
+      "10",
+      "11",
+      "20",
+      "30"
+    ]
+  },
+  "fromSelImg": [
+    "/detail_ex/from_sel_img1.png",
+    "/detail_ex/from_sel_img2.png",
+    "/detail_ex/from_sel_img3.png"
+  ],
+  "pDesc": "[{\"type\":\"paragraph\",\"children\":[{\"text\":\"Portable: 어느 곳에서나 사용할 수 있습니다.\"}]},{\"type\":\"paragraph\",\"children\":[{\"text\":\"Storage: 용랑이 큰 SSD로 용랑이 큰 게임을 설치할 수 있습니다.\"}]}]",
+  "reviews": {
+    "content": [
+      {
+        "rId": "1",
+        "uName": "Weight",
+        "uProfile": "/detail_ex/profile_1.png",
+        "uCtry": "US",
+        "rTitle": "Good!",
+        "rText": "Good, It's So Light!",
+        "rating": 5,
+        "rImgs": [
+          "/detail_ex/rimg1.png"
+        ],
+        "rDate": "2025-06-28",
+        "rOptions": [
+          {
+            "Color": "Red"
+          },
+          {
+            "SSD": "2TB"
+          }
+        ],
+        "totalUseful": "20",
+        "useful": true
+      },
+      {
+        "rId": "2",
+        "uName": "Speed",
+        "uProfile": "/detail_ex/profile_1.png",
+        "uCtry": "KR",
+        "rTitle": "Bad!",
+        "rText": "Bad, It's Too Slow!",
+        "rating": 2,
+        "rImgs": [
+          "/detail_ex/rimg2.png"
+        ],
+        "rvideo": [
+          "/detail_ex/rvideo1.mp4"
+        ],
+        "rDate": "2025-06-28",
+        "rOptions": [
+          {
+            "Color": "Blue"
+          },
+          {
+            "SSD": "500GB"
+          }
+        ],
+        "totalUseful": "10",
+        "useful": false
+      }
+    ]
+  }
+}

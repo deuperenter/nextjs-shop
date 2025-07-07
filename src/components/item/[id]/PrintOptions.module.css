@@ -1,0 +1,24 @@
+.imgBtn {
+  border-radius: 8px;
+}
+
+.this {
+  border: 3px solid #222;
+}
+
+.pos {
+  border: 3px dashed #222;
+}
+
+.not {
+  border: 3px dotted #888;
+}
+
+.textBtn {
+  border-radius: 100px;
+}
+
+.options {
+  display: flex;
+  gap: 5px;
+}

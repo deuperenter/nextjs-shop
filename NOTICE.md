@@ -22,7 +22,23 @@ This project includes code and resources from the following third-party librarie
 
 ---
 
-## 3. This Project (Original Code)
+## 3. davidjerleke/embla-carousel
+
+- **License**: MIT License
+- **Source**: https://github.com/davidjerleke/embla-carousel
+- **Attribution**: davidjerleke
+
+---
+
+## 4. awran5/react-simple-star-rating
+
+- **License**: MIT License
+- **Source**: https://github.com/awran5/react-simple-star-rating
+- **Attribution**: awran5
+
+---
+
+## 4. This Project (Original Code)
 
 - **License**: MIT License
 - **Copyright**: © 2024–2025 deuperenter

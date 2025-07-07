@@ -1,3 +1,6 @@
+"use client";
+import { useRef } from "react";
+
 const ShowStock = ({ stock }: { stock: number }) => {
   if (!stock) {
     return <p>재고 없음</p>;
@@ -8,7 +11,7 @@ const ShowStock = ({ stock }: { stock: number }) => {
   }
   return (
     <p>
-      수량: <select id="stock">{selection}</select>
+      <select id="stock">{selection}</select>
     </p>
   );
 };

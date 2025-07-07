@@ -1,9 +1,15 @@
-import Image from "next/image";
+"use client";
 import Link from "next/link";
+import PrintRating from "../../common/PrintRating";
+import PercentageBar from "../../common/PercentageBar";
+import PrintDetailCSS from "./PrintDetail.module.css";
+import RoundCSS from "../../common/round.module.css";
+import { useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faXmark } from "@fortawesome/free-solid-svg-icons";
+import { usePathname, useSearchParams } from "next/navigation";
 
 const PrintDetail = ({
-  pImgs,
-  pVideo,
   pName,
   seller,
   ratingScore,
@@ -13,6 +19,7 @@ const PrintDetail = ({
 }: {
   pImgs: string[];
   pVideo: string[] | undefined;
+  pVideoThumb: string[] | undefined;
   pName: string;
   seller: string;
   ratingScore: number;
@@ -20,27 +27,50 @@ const PrintDetail = ({
   totalRating: number;
   rating: { [k: string | number]: number };
 }) => {
+  const [showRating, setShowRating] = useState(false);
+
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  const fullUrl = pathname + "?" + searchParams.toString();
+
   return (
     <div>
-      <Image src={pImgs[0]} alt="상품 이미지1" width={250} height={250} />
-      {pVideo && (
-        <video width={320} height={320} controls preload="none">
-          <source src={pVideo[0]} type="video/mp4" />
-        </video>
-      )}
-      <p>{pName}</p>
+      <div className="font24">{pName}</div>
       <p>
         <Link href={`/seller/${seller}`}>{seller}의 다른 상품 보기</Link>
       </p>
-      <span>
-        {ratingScore}&nbsp;&nbsp;&nbsp;
-        <Link href={`/reviews/${pId}`}>{totalRating}개의 리뷰</Link>
-      </span>
-      <p>5점: {rating[5]}</p>
-      <p>4점: {rating[4]}</p>
-      <p>3점: {rating[3]}</p>
-      <p>2점: {rating[2]}</p>
-      <p>1점: {rating[1]}</p>
+      <div className={PrintDetailCSS.ratingNReviews}>
+        <div onClick={() => setShowRating(!showRating)}>
+          <span>{ratingScore}&nbsp;</span>
+          <span>
+            <PrintRating readonly initialValue={ratingScore} />
+          </span>
+        </div>
+        <Link href={`${fullUrl}#reviewSection`}>{totalRating}개의 리뷰</Link>
+      </div>
+
+      <div
+        className={`${
+          showRating ? PrintDetailCSS.ratingHover : PrintDetailCSS.ratingHide
+        } ${RoundCSS.round} ${RoundCSS.borderDark}`}
+      >
+        <div>
+          {[5, 4, 3, 2, 1].map((i) => (
+            <div key={`rating${i}`} className={PrintDetailCSS.ratingList}>
+              {i}점:
+              <PercentageBar percentage={(rating[i] / totalRating) * 100} />
+              <span>{(rating[i] / totalRating) * 100}%</span>
+            </div>
+          ))}
+        </div>
+        <button
+          className={PrintDetailCSS.ratingClose}
+          onClick={() => setShowRating(false)}
+        >
+          <FontAwesomeIcon icon={faXmark} />
+        </button>
+      </div>
     </div>
   );
 };

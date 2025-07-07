@@ -1,8 +1,9 @@
-import { StringArray } from "./utils";
+import { StringObjectArray } from "./utils";
 
 export type Reviews = {
   content: {
     rId: string;
+    uProfile: string;
     uName: string;
     uCtry: string;
     rTitle: string;
@@ -11,12 +12,14 @@ export type Reviews = {
     rImgs?: string[];
     rvideo?: string[];
     rDate: string;
-    useful: number;
+    rOptions?: StringObjectArray;
+    totalUseful: number;
+    useful: boolean;
   }[];
 };
 
 export type Options = {
-  type: { [k: string]: string[] | StringArray };
+  type: { [k: string]: string[] | StringObjectArray };
   able: string[];
 };
 
@@ -43,6 +46,7 @@ export type SubDetails = {
   pSubId: string;
   pImgs: string[];
   pVideo?: string[];
+  pVideoThumb?: string[];
   pName: string;
   pPrice: number;
   pCtry: string;

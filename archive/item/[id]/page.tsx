@@ -228,8 +228,6 @@ const ProductDetail = async ({
 
   const price = exchangePrice(pPrice, exchangeRate);
 
-  console.log(price);
-
   // 출력할 내용을 반환하는 함수
   function showStock(stock: number) {
     if (!stock) {

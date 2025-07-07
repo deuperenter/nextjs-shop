@@ -1,2 +1,2 @@
-export type StringArray = { [k: string]: string }[];
-export type NumberArray = { [k: string]: number }[];
+export type StringObjectArray = { [k: string]: string }[];
+export type NumberObjectArray = { [k: string]: number }[];

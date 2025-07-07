@@ -1,6 +1,7 @@
 "use client";
 import { BaseEditor, Descendant } from "slate";
 import { ReactEditor } from "slate-react";
+import WebEditorCSS from "./WebEditor.module.css";
 
 type CustomElement = { type: "paragraph"; children: CustomText[] };
 type CustomText = { text: string };
@@ -13,32 +14,34 @@ declare module "slate" {
   }
 }
 
-import { memo, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { createEditor } from "slate";
 import { Slate, Editable, withReact } from "slate-react";
 
 type editorProps = {
   editable: boolean;
-  initial: string;
+  initial?: string;
 };
 
-const WebEditor = memo(function WebEditor({ editable, initial }: editorProps) {
+function WebEditor({ editable, initial }: editorProps) {
   const [editor] = useState(() => withReact(createEditor()));
   // Update the initial content to be pulled from Local Storage if it exists.
+
   const initialValue = useMemo(
     () =>
-      // JSON.parse(localStorage.getItem("content")) ||
-      JSON.parse(initial) || [
-        {
-          type: "paragraph",
-          children: [{ text: "" }],
-        },
-      ],
+      initial
+        ? JSON.parse(initial)
+        : [
+            {
+              type: "paragraph",
+              children: [{ text: "" }],
+            },
+          ],
     []
   );
 
   return (
-    <div>
+    <div className={WebEditorCSS.editor}>
       <Slate
         editor={editor}
         initialValue={initialValue}
@@ -57,6 +60,6 @@ const WebEditor = memo(function WebEditor({ editable, initial }: editorProps) {
       </Slate>
     </div>
   );
-});
+}
 
 export default WebEditor;

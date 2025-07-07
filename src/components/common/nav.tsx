@@ -1,10 +1,11 @@
+"use client";
 import Image from "next/image";
 import navcss from "./nav.module.css";
 import Link from "next/link";
-import Form from "next/form";
+
 import roundcss from "./round.module.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
+import SearchBar from "./SearchBar";
+import SelectCtry from "./SelectCtry";
 
 export default function Nav() {
   return (
@@ -18,22 +19,9 @@ export default function Nav() {
             height={50}
           />
         </Link>
-        <div className={roundcss.menu}>메뉴</div>
-        <Form action="/s" className={roundcss.searchBar}>
-          <div className={`${roundcss.round100} ${roundcss.searchBox}`}>
-            <input
-              placeholder="EnterDeuver에서 검색하세요"
-              name="q"
-              className={roundcss.searchInput}
-            />
-          </div>
-          <button
-            type="submit"
-            className={`${roundcss.round100} ${roundcss.bold} ${roundcss.searchBtn} ${roundcss.bgBlue} ${roundcss.fontLight}`}
-          >
-            <FontAwesomeIcon icon={faMagnifyingGlass} />
-          </button>
-        </Form>
+        <button className={roundcss.menu}>카테고리</button>
+        <SearchBar />
+        <SelectCtry />
       </div>
     </nav>
   );

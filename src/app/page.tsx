@@ -9,6 +9,9 @@ export default function Home() {
       <ReactButton />
       <NextJSButton />
       <Link href="/category">상품 카테고리 클릭</Link>
+      <div>
+        <Link href="/item/111">상품 111의 페이지로 이동</Link>
+      </div>
     </div>
   );
 }
