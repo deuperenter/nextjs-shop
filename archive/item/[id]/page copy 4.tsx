@@ -260,7 +260,7 @@ const ProductDetail = () => {
     );
   }
 
-  function printOptions(options: Options) {
+  function ProductOptions(options: Options) {
     const { type, able } = options;
     const opt = searchParam.get("opt") || "00"; // 선택한 옵션 명에서 순서 1번에서 1번, 2번에서 1번 이런 식으로, option
     const lst = searchParam.get("lst") || 0; // 마지막으로 선택한 옵션 // last select
@@ -335,7 +335,7 @@ const ProductDetail = () => {
     return allOptions.map((o, i) => <div key={`optionType${i}`}>{o}</div>);
   }
 
-  function printReviews(reviews: Reviews) {
+  function ProductReviews(reviews: Reviews) {
     return reviews.content.map((c) => {
       const { rId, rText, rating, rImgs, rvideo } = c;
       return (
@@ -361,7 +361,7 @@ const ProductDetail = () => {
     });
   }
 
-  function printDelivery(delivery: Delivery) {
+  function ProductDelivery(delivery: Delivery) {
     const { dFee, dDate, dImpCharge, ableCtry } = delivery;
 
     if (!ableCtry.includes("KR")) {
@@ -402,7 +402,7 @@ const ProductDetail = () => {
         </video>
       )}
       <p>{pName}</p>
-      {options && printOptions(options)}
+      {options && ProductOptions(options)}
       <p>{seller}</p>
       <p>
         <Link href={`/seller/${seller}`}>{seller}의 다른 상품 보기</Link>
@@ -418,7 +418,7 @@ const ProductDetail = () => {
       {/* 그냥 <Editable readOnly /> 하면 된다. 프리뷰도 필요 없다. */}
       {showStock(stock)}
       <WebEditor editable={true} initial={feature} />
-      {printDelivery(delivery)}
+      {ProductDelivery(delivery)}
       <WebEditor editable={true} initial={pInfo} />
       {fromSelImg?.map((fImg, i) => (
         <Image
@@ -432,7 +432,7 @@ const ProductDetail = () => {
       <p>제품 설명</p>
       <p>{pDesc}</p>
       <p>리뷰 보기</p>
-      {printReviews(reviews)}
+      {ProductReviews(reviews)}
       <p>
         <Link href={`/reviews/${pId}`}>리뷰 더 보기</Link>
       </p>

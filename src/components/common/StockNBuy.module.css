@@ -1,0 +1,25 @@
+.stockBar {
+  display: flex;
+  align-items: center;
+}
+
+.stockBar input {
+  display: flex;
+  width: 30px;
+  text-align: center;
+  align-items: center;
+  color: #eee;
+  background-color: #555;
+  padding: 0;
+  height: 25px;
+}
+
+.stockBtn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 25px;
+  height: 25px;
+  color: #eee;
+  background-color: #222;
+}

@@ -1,6 +1,9 @@
 "use client";
 import { useAppSelector } from "@/lib/store";
-import { exchangeRates, monUnitChart } from "@/lib/testData";
+import {
+  exchangeRates,
+  monUnitChart,
+} from "../../../../archive/item/common/testData";
 import {
   calcDiscount,
   exchangePriceCallback,
@@ -8,7 +11,7 @@ import {
 } from "@/lib/utils";
 import { Delivery } from "@/types/receivedData";
 
-const PrintDelivery = ({
+const ProductDelivery = ({
   delivery,
   pCtry,
   discount,
@@ -55,4 +58,4 @@ const PrintDelivery = ({
   );
 };
 
-export default PrintDelivery;
+export default ProductDelivery;

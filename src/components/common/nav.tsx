@@ -1,16 +1,21 @@
 "use client";
 import Image from "next/image";
-import navcss from "./nav.module.css";
 import Link from "next/link";
-
-import roundcss from "./round.module.css";
+import NavCSS from "./Nav.module.css";
 import SearchBar from "./SearchBar";
 import SelectCtry from "./SelectCtry";
+import CategoryList from "./CategoryList";
+import { useRef, useState } from "react";
+import { refArray } from "@/lib/utils";
 
 export default function Nav() {
+  const [openList, setOpenList] = useState(false);
+  const categoryRef = useRef<(Element | null)[]>([]);
+  const selectCtryRef = useRef<(HTMLElement | null)[]>([]);
+
   return (
-    <nav className={navcss.bar}>
-      <div className={navcss.menus}>
+    <nav className={NavCSS.bar}>
+      <div className={NavCSS.menus}>
         <Link href="/">
           <Image
             src="/enterdeuper_logo.svg"
@@ -19,9 +24,21 @@ export default function Nav() {
             height={50}
           />
         </Link>
-        <button className={roundcss.menu}>카테고리</button>
+        <button
+          onClick={() => setOpenList(!openList)}
+          className={NavCSS.menu}
+          ref={(el) => refArray<Element>(el, categoryRef)}
+        >
+          카테고리
+        </button>
+        <CategoryList
+          openList={openList}
+          setOpenList={setOpenList}
+          categoryRef={categoryRef}
+        />
+
         <SearchBar />
-        <SelectCtry />
+        <SelectCtry selectCtryRef={selectCtryRef} />
       </div>
     </nav>
   );

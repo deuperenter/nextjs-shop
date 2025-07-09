@@ -1,12 +1,11 @@
 "use client";
-import PrintRating from "@/components/common/PrintRating";
+import ProductRating from "@/components/common/ProductRating";
 import { Reviews } from "@/types/receivedData";
 import Image from "next/image";
 import Link from "next/link";
-import PrintReviewsCSS from "./PrintReviews.module.css";
+import ProductReviewsCSS from "./ProductReviews.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLandMineOn, faThumbsUp } from "@fortawesome/free-solid-svg-icons";
-import RoundCSS from "../../common/round.module.css";
 import ReportModal from "../../common/ReportModal";
 import { useState } from "react";
 import { postData } from "@/lib/handleData";
@@ -16,7 +15,13 @@ import { ALERT_FAILED } from "@/lib/utils";
 
 // 도움이 됨 버튼 isLoading, pending, suspend 등등 작업할 것
 
-const PrintReviews = ({ reviews, pId }: { reviews: Reviews; pId: string }) => {
+const ProductReviews = ({
+  reviews,
+  pId,
+}: {
+  reviews: Reviews;
+  pId: string;
+}) => {
   const [modal, setModal] = useState("");
 
   const usefulArray = reviews.content.map((c) => c.useful);
@@ -49,7 +54,7 @@ const PrintReviews = ({ reviews, pId }: { reviews: Reviews; pId: string }) => {
         } = c;
         return (
           <div key={rId}>
-            <div className={PrintReviewsCSS.profile}>
+            <div className={ProductReviewsCSS.profile}>
               <Image
                 src={uProfile}
                 width={50}
@@ -60,7 +65,7 @@ const PrintReviews = ({ reviews, pId }: { reviews: Reviews; pId: string }) => {
             </div>
             <div>{rTitle}</div>
             <div>
-              <PrintRating initialValue={rating} readonly />
+              <ProductRating initialValue={rating} readonly />
             </div>
             <div>
               {rDate}에 {uCtry}에서 리뷰함
@@ -92,7 +97,7 @@ const PrintReviews = ({ reviews, pId }: { reviews: Reviews; pId: string }) => {
               </video>
             )}
             <p>{totalUseful}명이 유용하다고 평가함</p>
-            <p className={RoundCSS.helpfulNReport}>
+            <p className={ProductReviewsCSS.helpfulNReport}>
               <button
                 onClick={async () => {
                   if (!isPending) {
@@ -112,8 +117,7 @@ const PrintReviews = ({ reviews, pId }: { reviews: Reviews; pId: string }) => {
                     setIsPending(false);
                   }
                 }}
-                className={`${RoundCSS.round} ${
-                  usefuls[i] ? RoundCSS.bgGreen : RoundCSS.borderDark
+                className={`round8 ${usefuls[i] ? "bgGreen" : "borderDark"}
                 }`}
               >
                 <FontAwesomeIcon icon={faThumbsUp} />
@@ -123,7 +127,7 @@ const PrintReviews = ({ reviews, pId }: { reviews: Reviews; pId: string }) => {
                 onClick={async () => {
                   setModal(rId);
                 }}
-                className={`${RoundCSS.round} ${RoundCSS.bgRed}`}
+                className="round8 bgRed"
               >
                 <FontAwesomeIcon icon={faLandMineOn} />
                 신고하기
@@ -140,4 +144,4 @@ const PrintReviews = ({ reviews, pId }: { reviews: Reviews; pId: string }) => {
   );
 };
 
-export default PrintReviews;
+export default ProductReviews;

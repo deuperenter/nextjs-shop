@@ -2,6 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import { useDispatch, useSelector, useStore } from "react-redux";
 import { countryReducer } from "./features/counter/countrySlice";
 import { alertReducer } from "./features/alert/alertSlice";
+import { categoryReducer } from "./features/category/categorySlice";
 
 // Use throughout your app instead of plain `useDispatch` and `useSelector`
 export const useAppDispatch = useDispatch.withTypes<AppDispatch>();
@@ -10,7 +11,11 @@ export const useAppStore = useStore.withTypes<AppStore>();
 
 export const makeStore = () => {
   return configureStore({
-    reducer: { country: countryReducer, alert: alertReducer },
+    reducer: {
+      country: countryReducer,
+      alert: alertReducer,
+      category: categoryReducer,
+    },
   });
 };
 

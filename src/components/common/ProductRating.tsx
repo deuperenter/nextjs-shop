@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Rating } from "react-simple-star-rating";
 
-const PrintRating = ({
+const ProductRating = ({
   readonly,
   initialValue,
 }: {
@@ -34,4 +34,4 @@ const PrintRating = ({
   );
 };
 
-export default PrintRating;
+export default ProductRating;

@@ -1,19 +1,18 @@
 "use client";
-import "./PercentageBar.css";
+import PercentageBarCSS from "./PercentageBar.module.css";
 
-const PercentageBar = ({ percentage }) => {
+const PercentageBar = ({ percentage, ref }) => {
   return (
     <>
-      <div className="bar-container">
+      <div className={PercentageBarCSS.barContainer} ref={ref}>
         <div
-          className="bar-fill"
+          className={PercentageBarCSS.barFill}
           style={{
             width: `${Math.min(percentage, 100)}%`,
             backgroundColor: "#cdcd1e",
           }}
-        >
-          <span className="bar-label"></span>
-        </div>
+          ref={ref}
+        ></div>
       </div>
     </>
   );

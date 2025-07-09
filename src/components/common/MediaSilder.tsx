@@ -5,6 +5,7 @@ import useEmblaCarousel from "embla-carousel-react";
 import { MediaSilderThumb } from "./MediaSilderThumb";
 import "./media-slider.css";
 import Image from "next/image";
+import { refArray } from "@/lib/utils";
 
 type PropType = {
   pMedia: string[][];
@@ -40,7 +41,7 @@ const MediaSilder: React.FC<PropType> = ({ pMedia, options }) => {
     emblaMainApi.on("select", onSelect).on("reInit", onSelect);
   }, [emblaMainApi, onSelect]);
 
-  const videoRefs = useRef([]);
+  const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
 
   return (
     <div className="embla">
@@ -61,7 +62,7 @@ const MediaSilder: React.FC<PropType> = ({ pMedia, options }) => {
                   height={480}
                   controls
                   preload="none"
-                  ref={(el) => (videoRefs.current[i] = el)}
+                  ref={(el) => refArray<HTMLVideoElement>(el, videoRefs)}
                   onBlur={() =>
                     videoRefs.current.forEach((video) => {
                       if (video) {

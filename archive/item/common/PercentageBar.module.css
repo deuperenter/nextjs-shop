@@ -1,4 +1,4 @@
-.bar-container {
+.barContainer {
   width: 120px;
   background-color: #e0e0e0;
   border-radius: 8px;
@@ -7,7 +7,7 @@
   margin: 10px 0;
 }
 
-.bar-fill {
+.barFill {
   height: 100%;
   display: flex;
   align-items: center;

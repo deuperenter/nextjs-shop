@@ -3,3 +3,8 @@
   align-items: center;
   gap: 10px;
 }
+
+.helpfulNReport {
+  display: flex;
+  gap: 10px;
+}

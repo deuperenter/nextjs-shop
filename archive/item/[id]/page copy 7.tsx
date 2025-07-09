@@ -108,7 +108,7 @@ const ShowStock = memo(function ShowStock({ stock }: { stock: number }) {
   );
 });
 
-const PrintOptions = memo(function PrintOptions({
+const ProductOptions = memo(function ProductOptions({
   options,
 }: {
   options: Options;
@@ -195,7 +195,7 @@ const PrintOptions = memo(function PrintOptions({
   return allOptions.map((o, i) => <div key={`optionType${i}`}>{o}</div>);
 });
 
-const PrintReviews = memo(function PrintReviews({
+const ProductReviews = memo(function ProductReviews({
   reviews,
 }: {
   reviews: Reviews;
@@ -226,7 +226,7 @@ const PrintReviews = memo(function PrintReviews({
 });
 
 // 얘도 최적화 안 함: ctry에 따라 바뀌는 값이 존재하기 때문에
-function PrintDelivery({
+function ProductDelivery({
   delivery,
   cMonUnit,
   discountPrice,
@@ -420,7 +420,7 @@ const ProductDetail = () => {
         </video>
       )}
       <p>{pName}</p>
-      {options && <PrintOptions options={options} />}
+      {options && <ProductOptions options={options} />}
       <p>{seller}</p>
       <p>
         <Link href={`/seller/${seller}`}>{seller}의 다른 상품 보기</Link>
@@ -435,7 +435,7 @@ const ProductDetail = () => {
       {discount && <p>정가: {`${cMonUnit}${exchangePrice(pPrice)}`}</p>}
       <ShowStock stock={stock} />
       <WebEditor editable={true} initial={feature} />
-      <PrintDelivery
+      <ProductDelivery
         delivery={delivery}
         cMonUnit={cMonUnit}
         discountPrice={discountPrice}
@@ -454,7 +454,7 @@ const ProductDetail = () => {
       <p>제품 설명</p>
       <p>{pDesc}</p>
       <p>리뷰 보기</p>
-      <PrintReviews reviews={reviews} />
+      <ProductReviews reviews={reviews} />
       <p>
         <Link href={`/reviews/${pId}`}>리뷰 더 보기</Link>
       </p>

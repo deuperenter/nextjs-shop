@@ -1,13 +1,16 @@
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
-import PrintCategoryCSS from "./PrintCategory.module.css";
-const PrintCaterory = ({ category }: { category: string[] }) => {
+import ProductCategoryCSS from "./ProductCategory.module.css";
+const ProductCaterory = ({ category }: { category: string[] }) => {
   const categoryStr = [];
   for (let i = 0; i < category.length; i++) {
     categoryStr.push(
       <div key={category[i]}>
-        <Link className={PrintCategoryCSS.link} href={`/items/${category[i]}`}>
+        <Link
+          className={ProductCategoryCSS.link}
+          href={`/items/${category[i]}`}
+        >
           {category[i]}
         </Link>
       </div>
@@ -19,14 +22,14 @@ const PrintCaterory = ({ category }: { category: string[] }) => {
       <div key={`arrow${i}`}>
         &nbsp;
         <FontAwesomeIcon
-          className={PrintCategoryCSS.arrow}
+          className={ProductCategoryCSS.arrow}
           icon={faChevronRight}
         />
         &nbsp;
       </div>
     );
   }
-  return <div className={PrintCategoryCSS.bar}>{categoryStr}</div>;
+  return <div className={ProductCategoryCSS.bar}>{categoryStr}</div>;
 };
 
-export default PrintCaterory;
+export default ProductCaterory;

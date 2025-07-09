@@ -1,0 +1,125 @@
+{
+  "Electronics": [
+    "All",
+    "Desktop",
+    "All-In-Ones",
+    "Laptop",
+    "Monitor",
+    "Tablet",
+    "Cell Phones",
+    "EBook Reader",
+    "Keyboards, Mice",
+    "Computer Components & Parts",
+    "Cameras",
+    "TV",
+    "Video Games & Consoles",
+    "Virtual Reality"
+  ],
+  "Fashion": [
+    "All",
+    "Clothing",
+    "Shoes",
+    "Jewelry",
+    "Watches",
+    "Handbags",
+    "Accessories",
+    "School Uniforms"
+  ],
+  "Books": [
+    "All",
+    "Computer Sciences",
+    "Information Sciences",
+    "Social Sciences",
+    "Natural Sciences",
+    "Applied Science",
+    "Mathematics",
+    "Philosophy",
+    "Psychology",
+    "Religion",
+    "Medicine",
+    "Sports",
+    "Literature",
+    "Geography",
+    "History"
+  ],
+  "Food": [
+    "All",
+    "Pantry",
+    "Meat & Seafood",
+    "Dairy & Eggs",
+    "Frozen",
+    "Hot & Ready",
+    "Bakery",
+    "Cookies",
+    "Snacks",
+    "Candy",
+    "Beverages",
+    "Coffee",
+    "Alcohol",
+    "Organic Foods",
+    "Gluten Free Foods"
+  ],
+  "Toys": [
+    "All",
+    "Action Figures & Statues",
+    "Baby Toys",
+    "Dolls",
+    "Puzzles"
+  ],
+  "Kitchin": [
+    "All",
+    "Cookware",
+    "Bakeware",
+    "Bar Tools",
+    "Kitchin Storage",
+    "Flatware, Knives & Cutlery"
+  ],
+  "Pets Supplies": [
+    "All",
+    "Dogs",
+    "Cats",
+    "Birds",
+    "Insect",
+    "Reptiles & Amphibians",
+    "Small Animals"
+  ],
+  "Furniture": [
+    "All",
+    "Bed",
+    "Office",
+    "Heating",
+    "Cooling",
+    "Vacuums",
+    "Storage"
+  ],
+  "Motors": [
+    "All",
+    "Vehicles",
+    "Car & Truck Parts",
+    "Wheels & Tires",
+    "Motercycle Parts",
+    "Other Vehicles Parts"
+  ],
+  "Sport": [
+    "All",
+    "Cycling",
+    "Fishing",
+    "Fitness",
+    "Golf",
+    "Water Sports",
+    "Winter Sports"
+  ],
+  "Office": [
+    "All",
+    "Desk organizers",
+    "Folders & filing",
+    "Paper shredders",
+    "Envelopes & mailing supplies",
+    "Calendars & planners",
+    "Notebooks & pads",
+    "Scissors",
+    "Whiteboards",
+    "Calculators",
+    "Staplers"
+  ]
+}

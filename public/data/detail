@@ -1,8 +1,8 @@
 {
   "pId": "111",
   "category": [
-    "electronics",
-    "netbook"
+    "Electronics",
+    "Laptop"
   ],
   "seller": "deuper",
   "rating": {
@@ -74,7 +74,7 @@
             "SSD": "2TB"
           }
         ],
-        "totalUseful": "20",
+        "totalUseful": 20,
         "useful": true
       },
       {
@@ -100,7 +100,7 @@
             "SSD": "500GB"
           }
         ],
-        "totalUseful": "10",
+        "totalUseful": 10,
         "useful": false
       }
     ]

@@ -5,7 +5,7 @@ import Nav from "./Nav";
 import { useAppDispatch } from "@/lib/store";
 import { changeCountry } from "@/lib/features/counter/countrySlice";
 
-const MainComponent = ({
+const MainContent = ({
   children,
 }: Readonly<{
   children: React.ReactNode;
@@ -50,4 +50,4 @@ const MainComponent = ({
   );
 };
 
-export default MainComponent;
+export default MainContent;

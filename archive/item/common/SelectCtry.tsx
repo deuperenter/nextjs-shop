@@ -2,8 +2,8 @@
 import { changeCountry } from "@/lib/features/counter/countrySlice";
 import { getData } from "@/lib/handleData";
 import { useAppDispatch, useAppSelector } from "@/lib/store";
-import { nation } from "@/lib/testData";
-import NavCSS from "./nav.module.css";
+import { nation } from "./testData";
+import NavCSS from "./Nav.module.css";
 
 function SelectCtry() {
   const ctry = useAppSelector((state) => state.country.value);

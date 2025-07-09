@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 
-const PrintDetail = ({
+const ProductDetail = ({
   pImgs,
   pVideo,
   pVideoThumb,
@@ -53,4 +53,4 @@ const PrintDetail = ({
   );
 };
 
-export default PrintDetail;
+export default ProductDetail;

@@ -3,9 +3,9 @@ import { Options } from "@/types/receivedData";
 import Image from "next/image";
 import { redirect, useParams, useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
-import PrintOptionsCSS from "./PrintOptions.module.css";
+import ProductOptionsCSS from "./ProductOptions.module.css";
 
-const PrintOptions = ({ options }: { options: Options | undefined }) => {
+const ProductOptions = ({ options }: { options: Options | undefined }) => {
   const { id } = useParams();
   const searchParam = useSearchParams();
   const router = useRouter();
@@ -90,12 +90,12 @@ const PrintOptions = ({ options }: { options: Options | undefined }) => {
               alt={`${title}${subTitle}`}
               width={65}
               height={65}
-              className={`${PrintOptionsCSS.imgBtn} ${
+              className={`${ProductOptionsCSS.imgBtn} ${
                 styleClass === "this"
-                  ? PrintOptionsCSS.this
+                  ? ProductOptionsCSS.this
                   : styleClass === "pos"
-                  ? PrintOptionsCSS.pos
-                  : PrintOptionsCSS.not
+                  ? ProductOptionsCSS.pos
+                  : ProductOptionsCSS.not
               }`}
             />
             {/* <div>{check}</div> */}
@@ -113,12 +113,12 @@ const PrintOptions = ({ options }: { options: Options | undefined }) => {
                 scroll: false,
               })
             }
-            className={`${PrintOptionsCSS.textBtn} ${
+            className={`${ProductOptionsCSS.textBtn} ${
               styleClass === "this"
-                ? PrintOptionsCSS.this
+                ? ProductOptionsCSS.this
                 : styleClass === "pos"
-                ? PrintOptionsCSS.pos
-                : PrintOptionsCSS.not
+                ? ProductOptionsCSS.pos
+                : ProductOptionsCSS.not
             }`}
           >
             {content}
@@ -131,10 +131,10 @@ const PrintOptions = ({ options }: { options: Options | undefined }) => {
     allOptions.push(someOptions);
   }
   return allOptions.map((o, i) => (
-    <div className={PrintOptionsCSS.options} key={`optionType${i}`}>
+    <div className={ProductOptionsCSS.options} key={`optionType${i}`}>
       {o}
     </div>
   ));
 };
 
-export default PrintOptions;
+export default ProductOptions;

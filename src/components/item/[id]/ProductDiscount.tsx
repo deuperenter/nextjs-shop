@@ -1,13 +1,16 @@
 "use client";
 import { useAppSelector } from "@/lib/store";
-import { exchangeRates, monUnitChart } from "@/lib/testData";
+import {
+  exchangeRates,
+  monUnitChart,
+} from "../../../../archive/item/common/testData";
 import {
   calcDiscount,
   exchangePriceCallback,
   monUnitSymbol,
 } from "@/lib/utils";
 
-export const PrintPrice = ({
+export const ProductPrice = ({
   discount,
   pPrice,
   pCtry,
@@ -42,4 +45,4 @@ export const PrintPrice = ({
   );
 };
 
-export default PrintPrice;
+export default ProductPrice;

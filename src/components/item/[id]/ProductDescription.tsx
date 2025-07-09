@@ -1,9 +1,9 @@
 import Image from "next/image";
 import React from "react";
-import DescCSS from "./PrintDescription.module.css";
+import DescCSS from "./ProductDescription.module.css";
 import WebEditor from "@/components/common/WebEditor";
 
-const PrintDescription = ({
+const ProductDescription = ({
   fromSelImg,
   pDesc,
 }: {
@@ -37,4 +37,4 @@ const PrintDescription = ({
   );
 };
 
-export default PrintDescription;
+export default ProductDescription;

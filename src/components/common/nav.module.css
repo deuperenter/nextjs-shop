@@ -18,43 +18,12 @@
   padding-right: 30px;
 }
 
-.SelectCtry {
-  width: 30px;
-  padding-left: 10px;
+/* 로고를 감싼 a 요소의 높이가 50이 넘지 않도록 설정합니다. */
+.menus a {
+  height: 50px;
 }
 
-.title {
-  position: absolute;
-  top: 6px;
-  left: 9px;
-  font-weight: 700;
-  user-select: none;
-}
-
-.nationList {
-  position: fixed;
-  top: 70px;
-  right: 10px;
-  padding: 5px;
-  padding-top: 25px;
-}
-
-.nationContent {
-  display: flex;
-  flex-direction: column;
-  max-height: 150px;
-  overflow-y: auto;
+/* 안에 있는 내용이 줄바꿈 되지 않도록 함 */
+.menu {
   white-space: nowrap;
-  padding-right: 20px;
-}
-
-.option {
-  display: flex;
-  padding-top: 10px;
-}
-
-.closeNation {
-  position: absolute;
-  top: 5px;
-  right: 7px;
 }

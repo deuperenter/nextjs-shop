@@ -1,5 +1,3 @@
-import { redirect } from "next/navigation";
-
 function errorHandler(e: unknown) {
   if (e instanceof Error) {
     console.error(e.message);
@@ -10,7 +8,9 @@ function errorHandler(e: unknown) {
 }
 
 export async function getData(url: string | URL) {
-  return fetch(url)
+  return fetch(url, {
+    mode: "cors",
+  })
     .then((r) => r.json())
     .catch(errorHandler);
 }

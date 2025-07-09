@@ -1,0 +1,18 @@
+.barContainer {
+  width: 120px;
+  background-color: #e0e0e0;
+  border-radius: 8px;
+  overflow: hidden;
+  height: 25px;
+  margin: 10px 0;
+}
+
+.barFill {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
+  background-color: #cdcd1e;
+}

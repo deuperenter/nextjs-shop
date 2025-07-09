@@ -1,7 +1,6 @@
 "use client";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import AlertCSS from "./Alert.module.css";
-import RoundCSS from "./round.module.css";
 import {
   faCircleCheck,
   faCircleExclamation,
@@ -9,50 +8,15 @@ import {
 import { useAppDispatch, useAppSelector } from "@/lib/store";
 import { changeAlert } from "@/lib/features/alert/alertSlice";
 import { useEffect } from "react";
+import { hideScroll, showScroll } from "@/lib/utils";
 
 const Alert = () => {
   const msg = useAppSelector((state) => state.alert.value);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    const main = document.querySelector("main");
-    const nav = document.querySelector("nav div");
-    const footer = document.querySelector("footer div");
-
-    if (msg.length !== 0) {
-      const scrollBarWidth =
-        window.innerWidth - document.documentElement.clientWidth;
-
-      if (main instanceof HTMLElement) {
-        main.style.marginRight = `${scrollBarWidth + 30}px`;
-      }
-
-      if (nav instanceof HTMLElement) {
-        nav.style.paddingRight = `${scrollBarWidth + 30}px`;
-      }
-
-      if (footer && footer instanceof HTMLElement) {
-        footer.style.paddingRight = `${scrollBarWidth + 30}px`;
-      }
-
-      document.body.style.overflow = "hidden";
-    }
-
-    return () => {
-      document.body.style.overflow = "";
-
-      if (main instanceof HTMLElement) {
-        main.style.marginRight = `30px`;
-      }
-
-      if (nav instanceof HTMLElement) {
-        nav.style.paddingRight = `30px`;
-      }
-
-      if (footer instanceof HTMLElement) {
-        footer.style.paddingRight = "0px";
-      }
-    };
+    hideScroll(msg.length !== 0);
+    return showScroll;
   }, [msg]);
 
   return (
@@ -60,7 +24,7 @@ const Alert = () => {
       {msg.length !== 0 && (
         <div className={AlertCSS.alertBkg}>
           <div className={AlertCSS.alertLayout}>
-            <div className={`${AlertCSS.alertWindow} ${RoundCSS.round16}`}>
+            <div className={`${AlertCSS.alertWindow} round16`}>
               {msg.length === 2 ? (
                 <>
                   <FontAwesomeIcon
@@ -86,9 +50,7 @@ const Alert = () => {
               <div>
                 <button
                   onClick={() => dispatch(changeAlert([]))}
-                  className={`${AlertCSS.alertBtn} ${"font20"} ${
-                    RoundCSS.fontLight
-                  } ${RoundCSS.bold} ${RoundCSS.round} ${RoundCSS.bgDark}`}
+                  className={`${AlertCSS.alertBtn} font20 fontLight bold round8 bgDark`}
                 >
                   확인
                 </button>

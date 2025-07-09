@@ -1,11 +1,5 @@
-import PercentageBar from "../../components/common/PercentageBar";
-
 const PostPage = async () => {
-  return (
-    <>
-      <PercentageBar percentage={75} />
-    </>
-  );
+  return <></>;
 };
 
 export default PostPage;

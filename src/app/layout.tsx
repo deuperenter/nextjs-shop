@@ -1,14 +1,12 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import MainComponent from "@/components/common/Main";
+import MainContent from "@/components/common/MainContent";
 
 import { config } from "@fortawesome/fontawesome-svg-core";
 
 import "@fortawesome/fontawesome-svg-core/styles.css";
 import StoreProvider from "./StoreProvider";
-import Nav from "@/components/common/Nav";
-import Footer from "@/components/common/Footer";
 import Alert from "@/components/common/Alert";
 
 config.autoAddCss = false;
@@ -30,7 +28,7 @@ export default function RootLayout({
       <html lang="en">
         <body>
           <Alert />
-          <MainComponent>{children}</MainComponent>
+          <MainContent>{children}</MainContent>
         </body>
       </html>
     </StoreProvider>

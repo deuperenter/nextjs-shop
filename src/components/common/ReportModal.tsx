@@ -1,13 +1,18 @@
 "use client";
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import ReportModalCSS from "../common/ReportModal.module.css";
-import RoundCSS from "../common/round.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { postData } from "@/lib/handleData";
 import { useAppDispatch } from "@/lib/store";
 import { changeAlert } from "@/lib/features/alert/alertSlice";
-import { ALERT_FAILED, REPORT_SUCCESS } from "@/lib/utils";
+import {
+  ALERT_FAILED,
+  hideScroll,
+  refArray,
+  REPORT_SUCCESS,
+  showScroll,
+} from "@/lib/utils";
 
 const ReportModal = ({
   pId,
@@ -19,7 +24,7 @@ const ReportModal = ({
   setModal: Dispatch<SetStateAction<string>>;
 }) => {
   const [reportContent, setReportContent] = useState("");
-  const closeModalRef = useRef(null);
+  const closeModalRef = useRef<(HTMLElement | null)[]>([]);
   const dispatch = useAppDispatch();
 
   async function reportData() {
@@ -46,42 +51,8 @@ const ReportModal = ({
   }
 
   useEffect(() => {
-    const main = document.querySelector("main");
-    const nav = document.querySelector("nav div");
-    const footer = document.querySelector("footer div");
-
-    const scrollBarWidth =
-      window.innerWidth - document.documentElement.clientWidth;
-
-    if (main instanceof HTMLElement) {
-      main.style.marginRight = `${scrollBarWidth + 30}px`;
-    }
-
-    if (nav instanceof HTMLElement) {
-      nav.style.paddingRight = `${scrollBarWidth + 30}px`;
-    }
-
-    if (footer && footer instanceof HTMLElement) {
-      footer.style.paddingRight = `${scrollBarWidth + 30}px`;
-    }
-
-    document.body.style.overflow = "hidden";
-
-    return () => {
-      document.body.style.overflow = "";
-
-      if (main instanceof HTMLElement) {
-        main.style.marginRight = `30px`;
-      }
-
-      if (nav instanceof HTMLElement) {
-        nav.style.paddingRight = `30px`;
-      }
-
-      if (footer instanceof HTMLElement) {
-        footer.style.paddingRight = "0px";
-      }
-    };
+    hideScroll();
+    return showScroll;
   }, []);
 
   return (
@@ -89,28 +60,42 @@ const ReportModal = ({
       <div className={ReportModalCSS.modalBkg}></div>
       <div
         onClick={(e) => {
-          if (!closeModalRef.current?.contains(e.target)) {
+          if (!closeModalRef.current.some((c) => c === e.target)) {
             setModal("");
           }
         }}
         className={ReportModalCSS.modalLayout}
       >
         <div
-          ref={closeModalRef}
-          className={`${ReportModalCSS.modalWindow} ${RoundCSS.round16}`}
+          ref={(el) => refArray<Element>(el, closeModalRef)}
+          className={`${ReportModalCSS.modalWindow} round16`}
         >
-          <div ref={closeModalRef} className={`${ReportModalCSS.modalContent}`}>
-            <div ref={closeModalRef} className={ReportModalCSS.titleNClose}>
-              <div ref={closeModalRef} className="font20">
+          <div
+            ref={(el) => refArray<Element>(el, closeModalRef)}
+            className={`${ReportModalCSS.modalContent}`}
+          >
+            <div
+              ref={(el) => refArray<Element>(el, closeModalRef)}
+              className={ReportModalCSS.titleNClose}
+            >
+              <div
+                ref={(el) => refArray<Element>(el, closeModalRef)}
+                className="font20"
+              >
                 신고하기
               </div>
-              <button ref={closeModalRef} onClick={() => setModal("")}>
+              <button
+                ref={(el) => refArray<Element>(el, closeModalRef)}
+                onClick={() => setModal("")}
+              >
                 <FontAwesomeIcon icon={faXmark} />
               </button>
             </div>
-            <p ref={closeModalRef}>신고 사유를 작성해주세요(15~150자)</p>
+            <p ref={(el) => refArray<Element>(el, closeModalRef)}>
+              신고 사유를 작성해주세요(15~150자)
+            </p>
             <textarea
-              ref={closeModalRef}
+              ref={(el) => refArray<Element>(el, closeModalRef)}
               name="report"
               id="report"
               className={ReportModalCSS.textarea}
@@ -120,9 +105,9 @@ const ReportModal = ({
               placeholder="신고가 부적절한 경우 제재합니다."
             ></textarea>
             <button
-              ref={closeModalRef}
+              ref={(el) => refArray<Element>(el, closeModalRef)}
               onClick={reportData}
-              className={`${ReportModalCSS.submitReport} ${RoundCSS.round} ${RoundCSS.bgBlue} ${RoundCSS.fontLight}`}
+              className={`${ReportModalCSS.submitReport} round8 bgBlue fontLight`}
             >
               제출하기
             </button>

@@ -226,7 +226,7 @@ function showStock(stock: number) {
   );
 }
 
-function printOptions(options: Options) {
+function ProductOptions(options: Options) {
   const { id } = useParams();
   const { type, able } = options;
   const searchParam = useSearchParams();
@@ -309,7 +309,7 @@ function printOptions(options: Options) {
   return allOptions.map((o, i) => <div key={`optionType${i}`}>{o}</div>);
 }
 
-function printReviews(reviews: Reviews) {
+function ProductReviews(reviews: Reviews) {
   return reviews.content.map((c) => {
     const { rId, rText, rating, rImgs, rvideo } = c;
     return (
@@ -335,7 +335,7 @@ function printReviews(reviews: Reviews) {
   });
 }
 
-function printDelivery(
+function ProductDelivery(
   delivery: Delivery,
   exchangePrice: (n: number) => number,
   cMonUnit: string,
@@ -390,7 +390,7 @@ const ProductDetail = () => {
         </video>
       )}
       <p>{pName}</p>
-      {options && printOptions(options)}
+      {options && ProductOptions(options)}
       <p>{seller}</p>
       <p>
         <Link href={`/seller/${seller}`}>{seller}의 다른 상품 보기</Link>
@@ -405,7 +405,7 @@ const ProductDetail = () => {
       {discount && <p>정가: {`${cMonUnit}${exchangePrice(pPrice)}`}</p>}
       {showStock(stock)}
       <WebEditor editable={true} initial={feature} />
-      {printDelivery(delivery, exchangePrice, cMonUnit, discountPrice)}
+      {ProductDelivery(delivery, exchangePrice, cMonUnit, discountPrice)}
       <WebEditor editable={true} initial={pInfo} />
       {fromSelImg?.map((fImg, i) => (
         <Image
@@ -419,7 +419,7 @@ const ProductDetail = () => {
       <p>제품 설명</p>
       <p>{pDesc}</p>
       <p>리뷰 보기</p>
-      {printReviews(reviews)}
+      {ProductReviews(reviews)}
       <p>
         <Link href={`/reviews/${pId}`}>리뷰 더 보기</Link>
       </p>

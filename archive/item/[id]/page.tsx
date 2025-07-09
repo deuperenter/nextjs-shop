@@ -244,7 +244,7 @@ const ProductDetail = async ({
     );
   }
 
-  function printOptions(options: Options) {
+  function ProductOptions(options: Options) {
     const { type, able } = options;
     // 불가능한 옵션을 선택한 경우 기본값으로 이동하는 방식 Dell의 방식을 가져왔다.
     const allOptions = [];
@@ -277,7 +277,7 @@ const ProductDetail = async ({
     return allOptions.map((o, i) => <div key={`optionType${i}`}>{o}</div>);
   }
 
-  function printReviews(reviews: Reviews) {
+  function ProductReviews(reviews: Reviews) {
     return reviews.content.map((c) => {
       const { rId, rText, rating, rImgs, rvideo } = c;
       return (
@@ -303,7 +303,7 @@ const ProductDetail = async ({
     });
   }
 
-  function printDelivery(delivery: Delivery) {
+  function ProductDelivery(delivery: Delivery) {
     const { dFee, dDate, dImpCharge, ableCtry } = delivery;
 
     if (!ableCtry.includes("KR")) {
@@ -343,7 +343,7 @@ const ProductDetail = async ({
         </video>
       )}
       <p>{pName}</p>
-      {options && printOptions(options)}
+      {options && ProductOptions(options)}
       <p>{seller}</p>
       <p>
         <Link href={`/seller/${seller}`}>{seller}의 다른 상품 보기</Link>
@@ -358,7 +358,7 @@ const ProductDetail = async ({
       {/* 그냥 <Editable readOnly /> 하면 된다. 프리뷰도 필요 없다. */}
       <WebEditor editable={true} initial={feature} />
       {showStock(stock)}
-      {printDelivery(delivery)}
+      {ProductDelivery(delivery)}
       <WebEditor editable={true} initial={pInfo} />
       {fromSelImg?.map((fImg, i) => (
         <Image
@@ -372,7 +372,7 @@ const ProductDetail = async ({
       <p>제품 설명</p>
       <p>{pDesc}</p>
       <p>리뷰 보기</p>
-      {printReviews(reviews)}
+      {ProductReviews(reviews)}
       <p>
         <Link href={`/reviews/${pId}`}>리뷰 더 보기</Link>
       </p>

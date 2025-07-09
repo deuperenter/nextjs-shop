@@ -1,0 +1,29 @@
+.list {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  top: 59px;
+  width: 260px;
+  max-height: 100vh;
+  border: 1px solid #222;
+  background-color: white;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.list div {
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.list div button {
+  display: flex;
+  padding: 0px;
+  align-items: center;
+  gap: 10px;
+}
+
+.list a {
+  text-decoration: none;
+  color: #222;
+}

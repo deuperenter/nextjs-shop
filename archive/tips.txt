@@ -24,8 +24,8 @@ useEffect와, 이벤트 핸들러 부분, return 문에서도 async 함수를 �
 - 레거시 코드 등등…
 
 npm i --save @fortawesome/fontawesome-svg-core
-
 npm i --save @fortawesome/free-solid-svg-icons
 npm i --save @fortawesome/free-regular-svg-icons
 npm i --save @fortawesome/free-brands-svg-icons
 
+reportmodal ref 손봐야 함 round.css 제거해서 손봐야 함

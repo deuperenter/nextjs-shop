@@ -1,19 +1,20 @@
 import WebEditor from "@/components/common/WebEditor";
-import PrintCaterory from "@/components/item/[id]/PrintCategory";
-import PrintDelivery from "@/components/item/[id]/PrintDelivery";
-import PrintOptions from "@/components/item/[id]/PrintOptions";
-import PrintReviews from "@/components/item/[id]/PrintReviews";
-import PrintPrice from "@/components/item/[id]/PrintDiscount";
-import PrintDetail from "@/components/item/[id]/PrintDetail";
+import ProductCaterory from "@/components/item/[id]/ProductCategory";
+import ProductDelivery from "@/components/item/[id]/ProductDelivery";
+import ProductOptions from "@/components/item/[id]/ProductOptions";
+import ProductReviews from "@/components/item/[id]/ProductReviews";
+import ProductPrice from "@/components/item/[id]/ProductDiscount";
+import ProductDetail from "@/components/item/[id]/ProductDetail";
 import StockNBuy from "@/components/common/StockNBuy";
-import PrintDescription from "@/components/item/[id]/PrintDescription";
+import ProductDescription from "@/components/item/[id]/ProductDescription";
 import { getData } from "@/lib/handleData";
 import { Delivery, Detail, SubDetails } from "@/types/receivedData";
 import { EmblaOptionsType } from "embla-carousel";
 import MediaSilder from "@/components/common/MediaSilder";
 import "./layout.css";
+import { Metadata } from "next";
 
-const ProductDetail = async ({
+const ProductDetailPage = async ({
   params,
 }: {
   params: Promise<{ id: string }>;
@@ -21,11 +22,13 @@ const ProductDetail = async ({
   const { id } = await params;
   // console.log(id);
 
-  const detail: Detail = await getData("http://localhost:3000/detail");
+  const detail: Detail = await getData("http://localhost:3000/data/detail");
   const subDetails: SubDetails = await getData(
-    "http://localhost:3000/subDetails"
+    "http://localhost:3000/data/subDetails"
   );
-  const delivery: Delivery = await getData("http://localhost:3000/delivery");
+  const delivery: Delivery = await getData(
+    "http://localhost:3000/data/delivery"
+  );
 
   const { pId, category, seller, rating, options, fromSelImg, pDesc, reviews } =
     detail;
@@ -52,13 +55,13 @@ const ProductDetail = async ({
 
   return (
     <>
-      <PrintCaterory category={category} />
+      <ProductCaterory category={category} />
       <div className="detail-layout">
         <div>
           <MediaSilder pMedia={pMedia} options={OPTIONS} />
         </div>
         <div>
-          <PrintDetail
+          <ProductDetail
             pImgs={pImgs}
             pVideo={pVideo}
             pVideoThumb={pVideoThumb}
@@ -69,12 +72,12 @@ const ProductDetail = async ({
             totalRating={totalRating}
             rating={rating}
           />
-          <PrintPrice discount={discount} pPrice={pPrice} pCtry={pCtry} />
-          <PrintOptions options={options} />
+          <ProductPrice discount={discount} pPrice={pPrice} pCtry={pCtry} />
+          <ProductOptions options={options} />
           <hr />
           <WebEditor editable={false} initial={feature} />
           <hr />
-          <PrintDelivery
+          <ProductDelivery
             delivery={delivery}
             pCtry={pCtry}
             discount={discount}
@@ -87,10 +90,10 @@ const ProductDetail = async ({
       <hr />
       <WebEditor editable={false} initial={pInfo} />
       <hr />
-      <PrintDescription fromSelImg={fromSelImg} pDesc={pDesc} />
-      <PrintReviews pId={pId} reviews={reviews} />
+      <ProductDescription fromSelImg={fromSelImg} pDesc={pDesc} />
+      <ProductReviews pId={pId} reviews={reviews} />
     </>
   );
 };
 
-export default ProductDetail;
+export default ProductDetailPage;

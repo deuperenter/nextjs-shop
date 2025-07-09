@@ -1,8 +1,8 @@
 "use client";
 
 import { ChangeEvent, useState } from "react";
-import RoundCSS from "./round.module.css";
-import PrintBuy from "./PrintBuy";
+import ProductBuy from "./ProductBuy";
+import StockNBuyCSS from "./StockNBuy.module.css";
 
 const StockNBuy = ({ stock }: { stock: number }) => {
   const [buy, setBuy] = useState<string | number>(1);
@@ -32,10 +32,10 @@ const StockNBuy = ({ stock }: { stock: number }) => {
 
   return (
     <>
-      <span className={RoundCSS.stockBar}>
+      <span className={StockNBuyCSS.stockBar}>
         수량: &nbsp;
         <button
-          className={RoundCSS.stockBtn}
+          className={StockNBuyCSS.stockBtn}
           onClick={() => setBuy(buy === 1 ? 1 : +buy - 1)}
         >
           -
@@ -47,13 +47,13 @@ const StockNBuy = ({ stock }: { stock: number }) => {
           onBlur={(e) => setBuy(+e.target.value === 0 ? 1 : +e.target.value)}
         />
         <button
-          className={RoundCSS.stockBtn}
+          className={StockNBuyCSS.stockBtn}
           onClick={() => setBuy(buy === 30 ? 30 : +buy + 1)}
         >
           +
         </button>
       </span>
-      <PrintBuy buy={buy} />
+      <ProductBuy buy={buy} />
     </>
   );
 };
