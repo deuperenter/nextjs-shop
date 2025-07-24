@@ -1,28 +1,22 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { useDispatch, useSelector, useStore } from "react-redux";
-import { countryReducer } from "./features/counter/countrySlice";
-import { alertReducer } from "./features/alert/alertSlice";
+import { countryListReducer } from "./features/countryList/countryListSlice";
+import { countryReducer } from "./features/country/countrySlice";
 import { categoryReducer } from "./features/category/categorySlice";
-
-// Use throughout your app instead of plain `useDispatch` and `useSelector`
-export const useAppDispatch = useDispatch.withTypes<AppDispatch>();
-export const useAppSelector = useSelector.withTypes<RootState>();
-export const useAppStore = useStore.withTypes<AppStore>();
+import { currencyReducer } from "./features/currency/currency";
+import { modalReducer } from "./features/modal/modalSlice";
 
 export const makeStore = () => {
   return configureStore({
     reducer: {
+      countryList: countryListReducer,
       country: countryReducer,
-      alert: alertReducer,
       category: categoryReducer,
+      currency: currencyReducer,
+      modal: modalReducer,
     },
   });
 };
 
-// Infer the type of makeStore
 export type AppStore = ReturnType<typeof makeStore>;
-// Infer the `RootState` and `AppDispatch` types from the store itself
 export type RootState = ReturnType<AppStore["getState"]>;
 export type AppDispatch = AppStore["dispatch"];
-
-// npx create-next-app --example with-redux my-app

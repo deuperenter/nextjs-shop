@@ -3,13 +3,17 @@
 * {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  font-size: 16px;
+}
+
+html {
+  scroll-padding-top: 70px;
 }
 
 /* body */
 body {
   margin: 0;
   color: #222;
-  font-size: 16px;
 }
 
 /* width 와 height 속성이 안쪽 여백과 테두리는 포함하고, 바깥 여백은 포함하지 않습니다. */
@@ -26,8 +30,17 @@ button,
 input {
   border: none;
   margin: 0px;
-  font-size: 16px;
   background-color: transparent; /* 투명 */
+  color: #222;
+}
+
+button {
+  font-weight: bold;
+}
+
+.btnWithIcon {
+  display: flex;
+  align-items: center;
 }
 
 /* 마우스를 버튼에 갖다댈 때(:hover 의사 클래스, 선택한 요소가 특별한 상태일 경우) 마우스의 모양: 가리키는 모양 */
@@ -51,19 +64,21 @@ a:hover {
   text-decoration: underline;
 }
 
-/* 버튼 안에 있는 a 요소의 글자 색깔 */
-button a {
+.linkBtn {
   color: #222;
+  text-align: center;
 }
 
-/* 버튼 안에 있는 a 요소에 마우스를 갖다댔을 때의 글자 색깔 */
-button a:hover {
+.linkBtn:hover {
   text-decoration: none;
-  color: #222;
 }
 
 /* text */
 /* font-weight: 글꼴 굵기 */
+.normal {
+  font-weight: normal;
+}
+
 .bold {
   font-weight: bold;
 }
@@ -96,7 +111,7 @@ button a:hover {
   color: #ff4800;
 }
 
-.text-under {
+.text-through {
   text-decoration: line-through;
 }
 
@@ -130,19 +145,23 @@ button a:hover {
   background-color: #e6e6eb;
 }
 
+.bgGray {
+  background-color: #9a9aad;
+}
+
 .bgDark {
   background-color: #333;
 }
 
 /* background-color, border만 있는 버튼과 크기를 동일하게 유지하기 위해 이렇게 했습니다. */
 .bgOrange {
-  border: 1px solid #f6bf5a;
-  background-color: #f6bf5a;
+  border: 1px solid #ffa500;
+  background-color: #ffa500;
 }
 
 .bgGreen {
-  border: 1px solid #aadd1f;
-  background-color: #aadd1f;
+  border: 1px solid #41dc8e;
+  background-color: #41dc8e;
 }
 
 .bgBlue {
@@ -176,10 +195,10 @@ main {
 }
 
 /* 렌더링 관련: 요소를 숨기거나 보이게 할 수 있습니다. */
-.hide-main {
+.hide {
   display: none;
 }
 
-.show-main {
+.show {
   display: block;
 }

@@ -1,0 +1,31 @@
+.list {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  top: 59px;
+  width: 270px;
+  max-height: 100vh;
+  padding: 14px;
+  overflow-y: auto;
+  user-select: none;
+}
+
+.list button,
+.subtitle {
+  display: flex;
+  align-items: center;
+  padding: 5px 0;
+  width: 100%;
+}
+
+.list a {
+  height: initial;
+  text-decoration: none;
+  padding: 5px 0;
+  color: #222;
+}
+
+.backBtn {
+  display: flex;
+  gap: 5px;
+}

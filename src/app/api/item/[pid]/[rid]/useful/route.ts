@@ -1,4 +1,3 @@
-import { delay } from "@/lib/test";
 import { NextRequest } from "next/server";
 
 export async function POST(
@@ -7,8 +6,5 @@ export async function POST(
 ) {
   const { pid, rid } = await params;
 
-  // DB에 정보를 업데이트하기
-  delay(1000);
-
-  return Response.json({ success: "true" });
+  return Response.json({ success: "true", data: { pid, rid } });
 }

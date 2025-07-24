@@ -1,14 +1,9 @@
-/* Device Type	Breakpoint Range	Examples
-Mobile	320px - 480px	Smartphones (portrait)
-Tablet	481px - 768px	Tablets (portrait), small laptops
-Small Desktop	769px - 1024px	Tablets (landscape), smaller laptops
-Large Desktop	1025px and up	Desktop monitors, larger laptops 
-https://dev.to/gerryleonugroho/responsive-design-breakpoints-2025-playbook-53ih
-amazon max: 1500px
-*/
-
-.detail-layout {
+.detail-main {
   max-width: 1024px;
   display: flex;
   gap: 30px;
+}
+
+.detail-main-left .detail-main-right {
+  min-width: 320px;
 }

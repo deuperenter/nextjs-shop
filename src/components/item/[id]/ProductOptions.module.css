@@ -1,5 +1,14 @@
+.options {
+  display: flex;
+  gap: 5px;
+}
+
 .imgBtn {
   border-radius: 8px;
+}
+
+.textBtn {
+  border-radius: 100px;
 }
 
 .this {
@@ -12,13 +21,4 @@
 
 .not {
   border: 3px dotted #888;
-}
-
-.textBtn {
-  border-radius: 100px;
-}
-
-.options {
-  display: flex;
-  gap: 5px;
 }

@@ -1,0 +1,46 @@
+.alertWindow {
+  position: absolute;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  width: 260px;
+  gap: 10px;
+  padding: 20px;
+  background-color: #eee;
+  user-select: none;
+}
+
+.alertIcon {
+  position: relative;
+  width: 60px;
+  height: 60px;
+}
+
+.alertError path {
+  fill: #ff4800;
+}
+
+.alertMsg {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.alertMsg div {
+  word-break: keep-all;
+  text-align: center;
+}
+
+.alertBtns {
+  display: flex;
+  gap: 20px;
+}
+
+.alertBtn {
+  padding-left: 12px;
+  padding-right: 12px;
+  padding-top: 6px;
+  padding-bottom: 6px;
+}

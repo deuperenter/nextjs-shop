@@ -1,17 +1,16 @@
 "use client";
-import ProductRating from "@/components/common/ProductRating";
 import { Reviews } from "@/types/receivedData";
 import Image from "next/image";
 import Link from "next/link";
 import ProductReviewsCSS from "./ProductReviews.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLandMineOn, faThumbsUp } from "@fortawesome/free-solid-svg-icons";
-import ReportModal from "../../common/ReportModal";
 import { useState } from "react";
 import { postData } from "@/lib/handleData";
-import { useAppDispatch } from "@/lib/store";
-import { changeAlert } from "@/lib/features/alert/alertSlice";
-import { ALERT_FAILED } from "@/lib/utils";
+import { useAppDispatch } from "@/lib/hook";
+import { showModal } from "@/lib/features/modal/modalSlice";
+import { ALERT_FAILED_DISPATCH } from "@/lib/modal";
+import { Rating } from "react-simple-star-rating";
 
 // 도움이 됨 버튼 isLoading, pending, suspend 등등 작업할 것
 
@@ -22,9 +21,7 @@ const ProductReviews = ({
   reviews: Reviews;
   pId: string;
 }) => {
-  const [modal, setModal] = useState("");
-
-  const usefulArray = reviews.content.map((c) => c.useful);
+  const usefulArray = reviews.contents.map((c) => c.useful);
 
   const [isPending, setIsPending] = useState(false);
   const [usefuls, setUsefuls] = useState(usefulArray);
@@ -33,10 +30,10 @@ const ProductReviews = ({
 
   return (
     <>
-      <p className="font24" key="review">
+      <p id="reviewSection" className="font24" key="review">
         리뷰 보기
       </p>
-      {reviews.content.map((c, i) => {
+      {reviews.contents.map((content, i) => {
         const {
           rId,
           uProfile,
@@ -46,12 +43,12 @@ const ProductReviews = ({
           rText,
           rating,
           rImgs,
-          rvideo,
+          rvideos,
           rDate,
           rOptions,
           totalUseful,
-          useful,
-        } = c;
+        } = content;
+
         return (
           <div key={rId}>
             <div className={ProductReviewsCSS.profile}>
@@ -59,28 +56,31 @@ const ProductReviews = ({
                 src={uProfile}
                 width={50}
                 height={50}
-                alt={`profile${i}`}
+                alt={`profile${uName}`}
               />
               {uName}
             </div>
             <div>{rTitle}</div>
             <div>
-              <ProductRating initialValue={rating} readonly />
+              <Rating
+                readonly
+                allowFraction
+                initialValue={Math.round(rating * 2) / 2}
+              />
             </div>
             <div>
               {rDate}에 {uCtry}에서 리뷰함
             </div>
-            {rOptions &&
-              rOptions.map((rOption, i) => {
-                for (const index in rOption) {
-                  return (
-                    <span key={`rOption${i}`}>
-                      {index}: {rOption[index]}
-                      {rOptions.length - 1 === i ? "" : " | "}
-                    </span>
-                  );
-                }
-              })}
+            {rOptions?.map((rOption, i) => {
+              for (const index in rOption) {
+                return (
+                  <span key={`rOption${i}`}>
+                    {index}: {rOption[index]}
+                    {rOptions.length - 1 === i ? "" : " | "}
+                  </span>
+                );
+              }
+            })}
             <div>{rText}</div>
             {rImgs?.map((img, i) => (
               <Image
@@ -91,11 +91,11 @@ const ProductReviews = ({
                 height={250}
               />
             ))}
-            {rvideo && (
-              <video width={250} height={250} controls preload="none">
-                <source src={rvideo[0]} type="video/mp4" />
+            {rvideos?.map((rvideo, i) => (
+              <video key={`rvideo${i}`} width={250} height={250} controls>
+                <source src={rvideo} type="video/mp4" />
               </video>
-            )}
+            ))}
             <p>{totalUseful}명이 유용하다고 평가함</p>
             <p className={ProductReviewsCSS.helpfulNReport}>
               <button
@@ -112,22 +112,26 @@ const ProductReviews = ({
                       console.log("업데이트 성공!");
                     } else {
                       console.log("업데이트 실패!");
-                      dispatch(changeAlert(ALERT_FAILED));
+                      dispatch(showModal(ALERT_FAILED_DISPATCH));
                     }
                     setIsPending(false);
                   }
                 }}
-                className={`round8 ${usefuls[i] ? "bgGreen" : "borderDark"}
+                className={`round8 btnWithIcon ${
+                  usefuls[i] ? "bgGreen" : "borderDark"
+                }
                 }`}
               >
                 <FontAwesomeIcon icon={faThumbsUp} />
                 도움이 됨
               </button>
               <button
-                onClick={async () => {
-                  setModal(rId);
-                }}
-                className="round8 bgRed"
+                onClick={() =>
+                  dispatch(
+                    showModal({ value: { report: { pId: pId, rId: rId } } })
+                  )
+                }
+                className="round8 bgRed btnWithIcon"
               >
                 <FontAwesomeIcon icon={faLandMineOn} />
                 신고하기
@@ -139,7 +143,6 @@ const ProductReviews = ({
       <p key="reviewLink">
         <Link href={`/reviews/${pId}`}>리뷰 더 보기</Link>
       </p>
-      {modal && <ReportModal pId={pId} modal={modal} setModal={setModal} />}
     </>
   );
 };

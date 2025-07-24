@@ -6,19 +6,11 @@
 }
 
 .arrow {
-  display: flex;
-  position: relative;
-  top: 2px;
   padding-left: 6px;
   padding-right: 6px;
 }
 
 .link {
-  text-decoration-line: none;
   color: #565656;
   font-weight: 600;
-}
-
-.link:hover {
-  text-decoration-line: underline;
 }

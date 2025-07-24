@@ -1,30 +1,28 @@
-import WebEditor from "@/components/common/WebEditor";
-import ProductCaterory from "@/components/item/[id]/ProductCategory";
-import ProductDelivery from "@/components/item/[id]/ProductDelivery";
-import ProductOptions from "@/components/item/[id]/ProductOptions";
-import ProductReviews from "@/components/item/[id]/ProductReviews";
-import ProductPrice from "@/components/item/[id]/ProductDiscount";
-import ProductDetail from "@/components/item/[id]/ProductDetail";
-import StockNBuy from "@/components/common/StockNBuy";
-import ProductDescription from "@/components/item/[id]/ProductDescription";
 import { getData } from "@/lib/handleData";
 import { Delivery, Detail, SubDetails } from "@/types/receivedData";
-import { EmblaOptionsType } from "embla-carousel";
-import MediaSilder from "@/components/common/MediaSilder";
+import ProductCategory from "@/components/item/[id]/ProductCategory";
+import MediaSlider from "@/components/common/MediaSlider";
+import Link from "next/link";
 import "./layout.css";
-import { Metadata } from "next";
+import PrintRating from "@/components/common/PrintRating";
+import ProductPrice from "@/components/item/[id]/ProductPrice";
+import ProductOptions from "@/components/item/[id]/ProductOptions";
+import WebEditor from "@/components/common/WebEditor";
+import ProductReviews from "@/components/item/[id]/ProductReviews";
+import ProductDelivery from "@/components/item/[id]/ProductDelivery";
+import ProductDescriptionImage from "@/components/item/[id]/ProductDescriptionImage";
+import ProductReport from "@/components/item/[id]/ProductReport";
 
-const ProductDetailPage = async ({
+const ProductDetail = async ({
   params,
 }: {
   params: Promise<{ id: string }>;
 }) => {
   const { id } = await params;
-  // console.log(id);
 
   const detail: Detail = await getData("http://localhost:3000/data/detail");
   const subDetails: SubDetails = await getData(
-    "http://localhost:3000/data/subDetails"
+    "http://localhost:3000/data/subdetails"
   );
   const delivery: Delivery = await getData(
     "http://localhost:3000/data/delivery"
@@ -32,7 +30,6 @@ const ProductDetailPage = async ({
 
   const { pId, category, seller, rating, options, fromSelImg, pDesc, reviews } =
     detail;
-  const { ratingScore, totalRating } = rating;
   const {
     pImgs,
     pVideo,
@@ -42,58 +39,52 @@ const ProductDetailPage = async ({
     pCtry,
     discount,
     stock,
-    feature,
+    pFeature,
     pInfo,
   } = subDetails;
 
-  const OPTIONS: EmblaOptionsType = {};
-  const pMedia = [[...pImgs]];
-
-  if (pVideo && pVideoThumb) {
-    pMedia.push([...pVideo], [...pVideoThumb]);
-  }
-
   return (
     <>
-      <ProductCaterory category={category} />
-      <div className="detail-layout">
-        <div>
-          <MediaSilder pMedia={pMedia} options={OPTIONS} />
-        </div>
-        <div>
-          <ProductDetail
+      <ProductCategory category={category} />
+      <div className="detail-main">
+        <div className="detail-main-left">
+          <MediaSlider
             pImgs={pImgs}
             pVideo={pVideo}
             pVideoThumb={pVideoThumb}
-            pName={pName}
-            seller={seller}
-            ratingScore={ratingScore}
-            pId={pId}
-            totalRating={totalRating}
-            rating={rating}
           />
+        </div>
+        <div className="detail-main-right">
+          <div className="font24">{pName}</div>
+          <p>
+            <Link href={`/seller/${seller}`}>{seller}의 다른 상품 보기</Link>
+          </p>
+          <PrintRating rating={rating} />
           <ProductPrice discount={discount} pPrice={pPrice} pCtry={pCtry} />
           <ProductOptions options={options} />
           <hr />
-          <WebEditor editable={false} initial={feature} />
+          <WebEditor editable={false} initial={pFeature} />
           <hr />
           <ProductDelivery
             delivery={delivery}
             pCtry={pCtry}
             discount={discount}
             pPrice={pPrice}
+            stock={stock}
           />
-          <hr />
-          <StockNBuy stock={stock} />
+          <ProductReport pId={pId} seller={seller} />
         </div>
       </div>
       <hr />
       <WebEditor editable={false} initial={pInfo} />
+      <ProductDescriptionImage fromSelImg={fromSelImg} />
       <hr />
-      <ProductDescription fromSelImg={fromSelImg} pDesc={pDesc} />
+      <p className="font24">제품 설명</p>
+      <WebEditor editable={false} initial={pDesc} />
+      <hr />
       <ProductReviews pId={pId} reviews={reviews} />
     </>
   );
 };
 
-export default ProductDetailPage;
+export default ProductDetail;

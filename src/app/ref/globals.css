@@ -1,0 +1,180 @@
+/* 전체 선택자 */
+/* 웹사이트에서 사용할 글꼴 집합 설정 */
+* {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  margin: 0;
+  color: #222;
+  font-size: 16px;
+}
+
+/* width 와 height 속성이 안쪽 여백과 테두리는 포함하고, 바깥 여백은 포함하지 않습니다. */
+*,
+*:after,
+*:before {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+/* button, input */
+button,
+input {
+  border: none;
+  margin: 0px;
+  font-size: 16px;
+  background-color: transparent; /* 투명 */
+}
+
+/* 마우스를 버튼에 갖다댈 때(:hover 의사 클래스, 선택한 요소가 특별한 상태일 경우) 마우스의 모양: 가리키는 모양 */
+button:hover {
+  cursor: pointer;
+}
+
+/* 입력칸이나 버튼을 눌렀을 때 스타일: 외곽 없음 */
+/* :focus 의사 클래스는 양식의 입력 칸 등 포커스를 받은 요소를 나타냅니다. 보통 사용자가 요소를 클릭 또는 탭하거나, 키보드 Tab 키로 선택했을 때 발동합니다. 출처: https://developer.mozilla.org/ko/docs/Web/CSS/:focus */
+input:focus {
+  outline: none;
+}
+
+/* a */
+/* 글자 꾸미기: 없음, 밑줄 */
+a {
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* 버튼 안에 있는 a 요소의 글자 색깔 */
+button a {
+  color: #222;
+}
+
+/* 버튼 안에 있는 a 요소에 마우스를 갖다댔을 때의 글자 색깔 */
+button a:hover {
+  text-decoration: none;
+  color: #222;
+}
+
+/* text */
+/* font-weight: 글꼴 굵기 */
+.bold {
+  font-weight: bold;
+}
+
+.font24 {
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.font20 {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.font16 {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+/* font-color: 글꼴 색상  */
+.fontLight {
+  color: #eee;
+}
+
+.fontDark {
+  color: #222;
+}
+
+.fontRed {
+  color: #ff4800;
+}
+
+.text-under {
+  text-decoration: line-through;
+}
+
+/* border: 테두리 두께, solid라는 값이 있어야 보입니다. 테두리 색상 */
+.borderLight {
+  border: 1px solid #eee;
+}
+
+.borderDark {
+  border: 1px solid #868594;
+}
+
+.round8 {
+  border-radius: 8px;
+}
+
+.round16 {
+  border-radius: 16px;
+}
+
+.round100 {
+  border-radius: 100px;
+}
+
+/* background-color, border만 있는 버튼과 크기를 동일하게 유지하기 위해 이렇게 했습니다. */
+.bgWhite {
+  border: 1px solid white;
+  background-color: white;
+}
+
+.bgLight {
+  border: 1px solid #e6e6eb;
+  background-color: #e6e6eb;
+}
+
+.bgDark {
+  border: 1px solid #333;
+  background-color: #333;
+}
+
+.bgOrange {
+  border: 1px solid #f6bf5a;
+  background-color: #f6bf5a;
+}
+
+.bgGreen {
+  border: 1px solid #aadd1f;
+  background-color: #aadd1f;
+}
+
+.bgBlue {
+  border: 1px solid #1e88e5;
+  background-color: #1e88e5;
+}
+
+.bgRed {
+  border: 1px solid #ff4800;
+  background-color: #ff4800;
+}
+
+.bgVoid {
+  background-color: transparent;
+}
+
+/* div */
+#main-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.main {
+  position: relative;
+  margin-top: 60px;
+  flex: 1;
+}
+
+/* 렌더링 관련: 요소를 숨기거나 보이게 할 수 있습니다. */
+.hide-main {
+  display: none;
+}
+
+.show-main {
+  display: block;
+}

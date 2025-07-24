@@ -6,11 +6,13 @@
   ],
   "seller": "deuper",
   "rating": {
-    "1": 0,
-    "2": 1,
-    "3": 0,
-    "4": 0,
-    "5": 1,
+    "scores5To1": [
+      1,
+      0,
+      0,
+      1,
+      0
+    ],
     "totalRating": 2,
     "ratingScore": 3.5
   },
@@ -36,7 +38,7 @@
         "2tb SSD"
       ]
     },
-    "able": [
+    "ables": [
       "00",
       "01",
       "02",
@@ -53,7 +55,7 @@
   ],
   "pDesc": "[{\"type\":\"paragraph\",\"children\":[{\"text\":\"Portable: 어느 곳에서나 사용할 수 있습니다.\"}]},{\"type\":\"paragraph\",\"children\":[{\"text\":\"Storage: 용랑이 큰 SSD로 용랑이 큰 게임을 설치할 수 있습니다.\"}]}]",
   "reviews": {
-    "content": [
+    "contents": [
       {
         "rId": "1",
         "uName": "Weight",
@@ -74,7 +76,7 @@
             "SSD": "2TB"
           }
         ],
-        "totalUseful": 20,
+        "totalUseful": "20",
         "useful": true
       },
       {
@@ -88,7 +90,7 @@
         "rImgs": [
           "/detail_ex/rimg2.png"
         ],
-        "rvideo": [
+        "rvideos": [
           "/detail_ex/rvideo1.mp4"
         ],
         "rDate": "2025-06-28",
@@ -100,7 +102,7 @@
             "SSD": "500GB"
           }
         ],
-        "totalUseful": 10,
+        "totalUseful": "10",
         "useful": false
       }
     ]

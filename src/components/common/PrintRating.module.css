@@ -1,0 +1,19 @@
+.ratingWindow {
+  position: absolute;
+  padding: 3px 8px;
+  width: 250px;
+  user-select: none;
+}
+
+.ratingClose {
+  position: absolute;
+  right: 4px;
+  top: 4px;
+}
+
+.ratings {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 5px 0;
+}

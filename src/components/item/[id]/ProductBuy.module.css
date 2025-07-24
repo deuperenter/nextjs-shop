@@ -1,0 +1,11 @@
+.Btns {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.Btns button,
+.Btns a {
+  padding: 3px 10px;
+  user-select: none;
+}

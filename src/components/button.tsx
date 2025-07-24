@@ -2,13 +2,12 @@ const Button = () => {
   return <button>버튼</button>;
 };
 
-const ReactButton = () => {
+export const ReactButton = () => {
   return <button>리액트 버튼</button>;
 };
 
-const NextJSButton = () => {
+export const NextJSButton = () => {
   return <button>Next.js 버튼</button>;
 };
 
 export default Button;
-export { ReactButton, NextJSButton };
