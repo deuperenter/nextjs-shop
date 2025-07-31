@@ -38,7 +38,15 @@ This project includes code and resources from the following third-party librarie
 
 ---
 
-## 4. This Project (Original Code)
+## 5. xiaolin/react-image-gallery
+
+- **License**: MIT License
+- **Source**: https://github.com/xiaolin/react-image-gallery
+- **Attribution**: xiaolin
+
+---
+
+## 6. This Project (Original Code)
 
 - **License**: MIT License
 - **Copyright**: © 2024–2025 deuperenter
