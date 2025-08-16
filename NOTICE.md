@@ -30,19 +30,19 @@ This project includes code and resources from the following third-party librarie
 
 ---
 
-## 4. awran5/react-simple-star-rating
+## 4. smastrom/react-rating
 
 - **License**: MIT License
-- **Source**: https://github.com/awran5/react-simple-star-rating
-- **Attribution**: awran5
+- **Source**: https://github.com/smastrom/react-rating
+- **Attribution**: smastrom
 
 ---
 
-## 5. xiaolin/react-image-gallery
+## 5. react-dropzone/react-dropzone
 
 - **License**: MIT License
-- **Source**: https://github.com/xiaolin/react-image-gallery
-- **Attribution**: xiaolin
+- **Source**: https://github.com/react-dropzone/react-dropzone
+- **Attribution**: react-dropzone
 
 ---
 
